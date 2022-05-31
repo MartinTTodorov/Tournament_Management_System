@@ -98,7 +98,7 @@ namespace DataAccessLayer
             }
             catch(Exception ex)
             {
-
+                throw;
             }
             finally
             {

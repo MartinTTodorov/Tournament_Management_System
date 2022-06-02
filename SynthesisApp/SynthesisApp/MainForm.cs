@@ -15,6 +15,18 @@ namespace SynthesisApp
         public MainForm()
         {
             InitializeComponent();
+            cbTournaments.DataSource = null;
+
+        }
+
+        private void btnAddTournament_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbTournaments_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cbMatches.DataSource = null;
         }
     }
 }

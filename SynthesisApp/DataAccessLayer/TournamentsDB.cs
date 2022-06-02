@@ -12,6 +12,7 @@ namespace DataAccessLayer
         public void AddTournament(Tournament tournament)
         {
             throw new NotImplementedException();
+            
         }
 
         public void DeleteTournament(Tournament tournament)
@@ -21,7 +22,7 @@ namespace DataAccessLayer
 
         public List<Tournament> ReadTournaments()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public void UpdateTournament(Tournament tournament)

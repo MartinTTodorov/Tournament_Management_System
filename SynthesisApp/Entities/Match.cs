@@ -22,6 +22,7 @@ namespace Entities
 
         public Match(int id, User player1, User player2, int player1Score, int player2Score)
         {
+            ValidateResults();
             this.id=id;
             this.player1=player1;
             this.player2=player2;
@@ -31,10 +32,29 @@ namespace Entities
 
         public Match(User player1, User player2, int player1Score, int player2Score)
         {
+            ValidateResults();
             this.player1 = player1;
             this.player2 = player2;
             this.player1Score = player1Score;
             this.player2Score = player2Score;
+        }
+
+        public void ValidateResults()
+        {
+            ValidateResults();
+            List<int> playerScores = new List<int>(new int[] { player1Score, player2Score });
+            for (int i = 0; i < playerScores.Count; i++)
+            {
+                if ((playerScores[0] >= 21 && playerScores[0] <= 29 && playerScores[0] - playerScores[1] >= 2) || (playerScores[0] == 29 && playerScores[1] == 30))
+                {
+                    playerScores.Reverse();
+                }
+                else
+                {
+                    throw new Exception("Input scores are invalid");
+                }
+
+            }
         }
     }
 }

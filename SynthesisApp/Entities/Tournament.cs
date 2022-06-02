@@ -12,7 +12,6 @@ namespace Entities
         private List<User> playersInTournament;
         private List<Match> matches;
         private TournamentType tournamentType;
-        private string tournamentName;
         private string tournamentInfo;
         private DateTime startDate;
         private DateTime endDate;
@@ -25,32 +24,60 @@ namespace Entities
         public List<User> PlayersInTournament { get { return playersInTournament; } }
         public List<Match> Match { get { return matches; } }
         public TournamentType TournamentType { get { return tournamentType; } }
-        public string TournamentName { get { return tournamentName; } }
         public string TournamentInfo { get { return tournamentInfo; } }
         public DateTime StartDate { get { return startDate; }
             private set
             {
-                //startDate cant be after endDate
+                if (startDate.CompareTo(endDate) > 0)
+                {
+                    throw new Exception("Incorrect dates");
+                }
                 startDate = value; 
             } }
         public DateTime EndDate { get { return endDate; }
             private set
             {
-                //endDate cant be before startDate
+                if (startDate.CompareTo(endDate) < 0)
+                {
+                    throw new Exception("Incorrect dates");
+                }
                 endDate = value;
             } }
 
         public int MinPlayers { get { return minPlayers; } 
             private set 
             {
-                //minPlayers cant be more than maxPlayers
+                if (MinPlayers>maxPlayers)
+                {
+                    throw new Exception("Min players cannot be more than max players");
+                }
             } }
 
         public int MaxPlayers { get { return maxPlayers; } }
         public string Location { get { return location; } }
         public string TournamentStatus { get { return tournamentStatus; } }
 
-        public void checkDate(DateTime startDate, DateTime endDate)
+
+        //Not all params are needed(lists)
+        public Tournament(int id, List<User> playersInTournament, List<Match> matches, TournamentType tournamentType, string tournamentInfo, DateTime startDate, DateTime endDate, int minPlayers, int maxPlayers, string location, string tournamentStatus)
+        {
+            ValidateDates(startDate, endDate);
+            ValidatePlayers(minPlayers, maxPlayers);
+            this.id = id;
+            //this.playersInTournament = playersInTournament;
+            this.matches = matches;
+            this.tournamentType = tournamentType;
+            this.tournamentInfo = tournamentInfo;
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.minPlayers = minPlayers;
+            this.maxPlayers = maxPlayers;
+            this.location = location;
+            this.tournamentStatus = tournamentStatus; //open
+
+        }
+
+        public void ValidateDates(DateTime startDate, DateTime endDate) //private
         {
 
             
@@ -60,9 +87,12 @@ namespace Entities
                 throw new Exception("Incorrect dates");
             }
         }
-        public void checkPlayers()
+        public void ValidatePlayers(int minPlayers, int maxPlayers)
         {
-
+            if (minPlayers<maxPlayers)
+            {
+                throw new Exception("Min players cannot be more than max players");
+            }
         }
 
 

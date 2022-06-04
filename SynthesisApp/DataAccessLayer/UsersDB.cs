@@ -8,7 +8,7 @@ using MySql.Data.MySqlClient;
 
 namespace DataAccessLayer
 {
-    public class UsersDB : IUsers<User>
+    public class UsersDB : IUsers<User>, IAutoIncrement
     {
 
         private MySqlConnection conn = new MySqlConnection("Server = studmysql01.fhict.local; Uid=dbi481796;Database=dbi481796;Pwd=sql7915");
@@ -31,13 +31,9 @@ namespace DataAccessLayer
                 cmd.Parameters.AddWithValue("Phone", user.Phone);
                 cmd.Parameters.AddWithValue("Type", user.Type);
 
-                if (cmd.ExecuteNonQuery() == 1)
+                if (cmd.ExecuteNonQuery() != 1)
                 {
-                    //
-                }
-                else
-                {
-                    //
+                    throw new Exception("Account was not added successfully");
                 }
 
             }
@@ -74,6 +70,27 @@ namespace DataAccessLayer
             catch (Exception ex)
             {
 
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public int GetID()
+        {
+            string sql = "SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbi481796' AND TABLE_NAME = 'synaccounts';";
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+                conn.Open();
+                return Convert.ToInt32(cmd.ExecuteScalar());
+
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
             }
             finally
             {

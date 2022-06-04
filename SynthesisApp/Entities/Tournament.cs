@@ -8,64 +8,44 @@ namespace Entities
 {
     public class Tournament
     {
+        //some are nullable
         private int id;
-        private List<User> playersInTournament;
-        private List<Match> matches;
-        private TournamentType tournamentType;
-        private string tournamentInfo;
-        private DateTime startDate;
-        private DateTime endDate;
         private int minPlayers;
         private int maxPlayers;
+
+        private string tournamentInfo;
         private string location;
         private string tournamentStatus;
 
-        public int Id { get { return id; } }
-        public List<User> PlayersInTournament { get { return playersInTournament; } }
-        public List<Match> Match { get { return matches; } }
+        private List<User>? playersInTournament;
+        private List<Match>? matches;
+
+        private TournamentType tournamentType;
+        private DateTime startDate;
+        private DateTime endDate;
+        //Add sport later. Currently we only work with badminton, but to make the application extendable
+        //add sport and each sport will have its own match rules
+
+        public int ID { get { return id; } }
+        public List<User> PlayersInTournament { get { return playersInTournament; } } //only get if it is not null
+        public List<Match> Matches { get { return matches; } }
         public TournamentType TournamentType { get { return tournamentType; } }
         public string TournamentInfo { get { return tournamentInfo; } }
-        public DateTime StartDate { get { return startDate; }
-            private set
-            {
-                if (startDate.CompareTo(endDate) > 0)
-                {
-                    throw new Exception("Incorrect dates");
-                }
-                startDate = value; 
-            } }
-        public DateTime EndDate { get { return endDate; }
-            private set
-            {
-                if (startDate.CompareTo(endDate) < 0)
-                {
-                    throw new Exception("Incorrect dates");
-                }
-                endDate = value;
-            } }
-
-        public int MinPlayers { get { return minPlayers; } 
-            private set 
-            {
-                if (MinPlayers>maxPlayers)
-                {
-                    throw new Exception("Min players cannot be more than max players");
-                }
-            } }
-
+        public DateTime StartDate { get { return startDate; } }
+        public DateTime EndDate { get { return endDate; } }
+        public int MinPlayers { get { return minPlayers; } }
         public int MaxPlayers { get { return maxPlayers; } }
         public string Location { get { return location; } }
         public string TournamentStatus { get { return tournamentStatus; } }
 
 
         //Not all params are needed(lists)
-        public Tournament(int id, List<User> playersInTournament, List<Match> matches, TournamentType tournamentType, string tournamentInfo, DateTime startDate, DateTime endDate, int minPlayers, int maxPlayers, string location, string tournamentStatus)
+        public Tournament(int id, TournamentType tournamentType, string tournamentInfo, DateTime startDate, DateTime endDate, int minPlayers, int maxPlayers, string location, string tournamentStatus)
         {
             ValidateDates(startDate, endDate);
             ValidatePlayers(minPlayers, maxPlayers);
+            ValidateType(tournamentType);
             this.id = id;
-            //this.playersInTournament = playersInTournament;
-            this.matches = matches;
             this.tournamentType = tournamentType;
             this.tournamentInfo = tournamentInfo;
             this.startDate = startDate;
@@ -73,21 +53,19 @@ namespace Entities
             this.minPlayers = minPlayers;
             this.maxPlayers = maxPlayers;
             this.location = location;
-            this.tournamentStatus = tournamentStatus; //open
+            this.tournamentStatus = "Open";
 
         }
 
-        public void ValidateDates(DateTime startDate, DateTime endDate) //private
+        private void ValidateDates(DateTime startDate, DateTime endDate) //private
         {
-
-            
 
             if (startDate.CompareTo(endDate)>0)
             {
                 throw new Exception("Incorrect dates");
             }
         }
-        public void ValidatePlayers(int minPlayers, int maxPlayers)
+        private void ValidatePlayers(int minPlayers, int maxPlayers)
         {
             if (minPlayers<maxPlayers)
             {
@@ -95,6 +73,18 @@ namespace Entities
             }
         }
 
+        private void ValidateType(TournamentType type) //make a unit test for every possible validation
+        {
+            if (!TournamentType.TournamentTypes.Contains(type));
+            {
+                throw new Exception("Invalid tournament type");
+            }
+        }
+
+        public override string ToString()
+        {
+            return $"Tournament ID:{this.id} players: {minPlayers}/{maxPlayers}";
+        }
 
     }
 }

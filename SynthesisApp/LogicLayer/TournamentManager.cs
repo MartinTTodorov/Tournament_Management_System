@@ -46,12 +46,14 @@ namespace LogicLayer
 
         public void UpdateTournament(Tournament tournament)
         {
+            //check tournament status
             tournamentsDB.UpdateTournament(tournament);
 
         }
 
         public void DeleteTournament(Tournament tournament)
         {
+            //check if the tournament exists in the list and then delete it
             tournamentsDB.DeleteTournament(tournament);
             tournaments.Remove(tournament);
         }

@@ -18,38 +18,9 @@ namespace Entities
 
 
         public Account Account { get { return account; } }
-        public string FirstName { get { return firstName; } 
-            private set {
-                Regex validateName = new Regex(@"[0-9]");
-                if (!validateName.IsMatch(FirstName.ToLower().ToString()))
-                {
-                    throw new Exception("Name cannot contain numbers");
-                }
-                firstName = value;
-            }
-        }
-
-        public string LastName { get { return lastName; }
-            private set {
-                Regex validateName = new Regex(@"[0-9]");
-                if (!validateName.IsMatch(LastName.ToLower().ToString()))
-                {
-                    throw new Exception("Name cannot contain numbers");
-                }
-                lastName = value;
-            }
-        }
-        public string Email { get { return email; } 
-            private set
-            {
-                Regex validateEmail = new Regex(@"^\\S+@\\S+\\.\\S+$");
-                if (!validateEmail.IsMatch(Email.ToLower().ToString()))
-                {
-                    throw new Exception("Invalid email");
-                }
-                email = value;
-            }
-        }
+        public string FirstName { get { return firstName; } }
+        public string LastName { get { return lastName; } }
+        public string Email { get { return email; } }
         public string Phone { get { return phone; } }
         public string Type { get { return type; } }
 
@@ -66,18 +37,18 @@ namespace Entities
             this.type = type;
         }
 
-        public void ValidateName(string name)
+        private void ValidateName(string name)
         {
             Regex validateName = new Regex(@"[0-9]");
-            if (!validateName.IsMatch(name.ToLower().ToString()))
+            if (validateName.IsMatch(name.ToLower().ToString()))
             {
                 throw new Exception("Name cannot contain numbers");
             }
         }
-
-        public void ValidateEmail(string email)
+        
+        private void ValidateEmail(string email)
         {
-            Regex validateEmail = new Regex(@"^\\S+@\\S+\\.\\S+$"); //([A-Za-z0-9])\w+@([A-Za-z0-9])\w+.\w
+            Regex validateEmail = new Regex(@"([A-Za-z0-9])\w+@([A-Za-z0-9])\w+.\w");
             if (!validateEmail.IsMatch(email.ToLower().ToString()))
             {
                 throw new Exception("Invalid email");

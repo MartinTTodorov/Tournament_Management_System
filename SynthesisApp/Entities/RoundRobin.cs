@@ -18,6 +18,12 @@ namespace Entities
             this.players = players;
         }
 
+        public RoundRobin()
+        {
+
+        }
+
+
         public override List<Match> CreateMatches(List<User> players) 
         {
             //pri suzdavaneto na machovete, player1score i player2score shte budat 0
@@ -52,6 +58,11 @@ namespace Entities
             User lastUser = players[players.Count-1];
             players.RemoveAt(players.Count-1);
             players.Insert(1, lastUser);
+        }
+
+        public override string ToString()
+        {
+            return "RoundRobin";
         }
     }
 }

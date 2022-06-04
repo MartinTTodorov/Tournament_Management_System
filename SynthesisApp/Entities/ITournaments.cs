@@ -9,7 +9,7 @@ namespace Entities
     public interface ITournaments<T>
     {
         public void AddTournament(T tournament);
-        public List<Tournament> ReadTournaments();
+        public List<T> ReadTournaments();
         public void UpdateTournament(T tournament);
         public void DeleteTournament(T tournament);
     }

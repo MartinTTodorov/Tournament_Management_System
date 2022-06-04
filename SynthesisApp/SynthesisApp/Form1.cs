@@ -8,7 +8,7 @@ namespace SynthesisApp
     public partial class Form1 : Form
     {
 
-        private UsersManager usersManager = new UsersManager(new UsersDB());
+        private UsersManager usersManager = new UsersManager(new UsersDB(), new UsersDB());
         public Form1()
         {
             InitializeComponent();

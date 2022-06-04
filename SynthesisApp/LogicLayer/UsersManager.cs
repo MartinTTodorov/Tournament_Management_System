@@ -11,13 +11,15 @@ namespace LogicLayer
     {
         private List<User> users;
         private IUsers<User> usersDB;
+        private IAutoIncrement autoIncrement;
 
         public List<User> Users { get { return users; } private set { users = value; } }
 
-        public UsersManager(IUsers<User> usersDB)
+        public UsersManager(IUsers<User> usersDB, IAutoIncrement autoIncrement)
         {
             this.usersDB = usersDB;
             users = usersDB.ReadUsers();
+            this.autoIncrement = autoIncrement;
         }
 
         public void GetUsers()

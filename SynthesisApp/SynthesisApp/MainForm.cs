@@ -15,7 +15,7 @@ namespace SynthesisApp
 {
     public partial class MainForm : Form
     {
-        TournamentManager tournamentManager = new TournamentManager(new TournamentsDB());
+        TournamentManager tournamentManager = new TournamentManager(new TournamentsDB(), new TournamentsDB());
         public MainForm()
         {
             InitializeComponent();
@@ -27,8 +27,14 @@ namespace SynthesisApp
 
         private void btnAddTournament_Click(object sender, EventArgs e)
         {
-            fmAddTournament form = new fmAddTournament(tournamentManager);
-            form.Show();
+            try
+            {
+                tournamentManager.AddTournament(new Tournament(tbInfo.Text, dtStartDate.Value, dtEndDate.Value, Convert.ToInt32(tbMinPlayers.Text), Convert.ToInt32(tbMaxPlayers.Text), tbLocation.Text, (TournamentType)cbTypes.SelectedItem));
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Wrong data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void cbTournaments_SelectedIndexChanged(object sender, EventArgs e)

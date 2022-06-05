@@ -28,13 +28,18 @@ namespace Entities
         {
             ValidateName(firstName);
             ValidateName(lastName);
-            ValidateEmail(email);
+            //ValidateEmail(email);
             this.account = account;
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
             this.phone = phone;
             this.type = type;
+        }
+
+        public User(Account account)//Used when user registers. If he wishes, he can later set the rest of his information
+        {
+            this.account = account;
         }
 
         private void ValidateName(string name)
@@ -48,7 +53,7 @@ namespace Entities
         
         private void ValidateEmail(string email)
         {
-            Regex validateEmail = new Regex(@"([A-Za-z0-9])\w+@([A-Za-z0-9])\w+.\w");
+            Regex validateEmail = new Regex(@"([A-Za-z0-9])\w+@([A-Za-z0-9])\w+.\w"); 
             if (!validateEmail.IsMatch(email.ToLower().ToString()))
             {
                 throw new Exception("Invalid email");

@@ -11,12 +11,15 @@ namespace LogicLayer
     {
         private List<Tournament> tournaments; //Should it be read only
         private ITournaments<Tournament> tournamentsDB;
+        IAutoIncrement autoIncrement;
 
         public List<Tournament> Tournaments { get { return tournaments; } private set { tournaments = value; } }
 
-        public TournamentManager(ITournaments<Tournament> tournamentsDB)
+        public TournamentManager(ITournaments<Tournament> tournamentsDB, IAutoIncrement autoIncrement)
         {
             this.tournamentsDB = tournamentsDB;
+            this.autoIncrement = autoIncrement;
+            tournaments = tournamentsDB.ReadTournaments();
         }
 
         public void GetTournaments()
@@ -33,15 +36,25 @@ namespace LogicLayer
 
         public void AddTournament(Tournament tournament)
         {
+            //creates a tournament with the appropriate ID and Status, as user doesnt set them
+            Tournament newTournament = new Tournament(autoIncrement.GetID(), tournament.TournamentType, tournament.TournamentInfo, tournament.StartDate, tournament.EndDate, tournament.MinPlayers, tournament.MaxPlayers, tournament.Location, "Open");
             try
             {
-                tournamentsDB.AddTournament(tournament);
+                //check if a tournament with the same data exists
+                if (!tournaments.Any(t => t == newTournament)) // do this for the rest too
+                {
+                    tournamentsDB.AddTournament(newTournament);
+                    tournaments.Add(newTournament);
+                }
+                else
+                {
+                    throw new Exception("The tournament already exists");
+                }
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            tournaments.Add(tournament);
         }
 
         public void UpdateTournament(Tournament tournament)
@@ -57,6 +70,15 @@ namespace LogicLayer
             tournamentsDB.DeleteTournament(tournament);
             tournaments.Remove(tournament);
         }
+
+        public void AddPlayer(Tournament tournament, User user)
+        {
+
+        }
+
+        
+
+
         
     }
 }

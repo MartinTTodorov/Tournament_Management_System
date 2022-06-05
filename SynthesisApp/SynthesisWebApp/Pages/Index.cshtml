@@ -5,6 +5,20 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">Welcome)</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    @for (int i = 0; i<@Model.Tournaments.Count; i++)
+    {
+        <div class="blog-box">
+
+                <div class="blog-text">
+                    <span> @Model.Tournaments[i].MinPlayers</span>
+                    <a href="/InfoBlog?ID=@Model.Tournaments[i].ID" class="blog-title">@Model.Tournaments[i].MaxPlayers</a>
+                    <p>@Model.Tournaments[i].TournamentInfo</p>
+                    <a href = "/InfoBlog?ID=@Model.Tournaments[i].ID">View</a>
+                </div>
+            </div>
+    }
+
 </div>

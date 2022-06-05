@@ -1,0 +1,34 @@
+﻿@page
+@model SynthesisWebApp.Pages.LoginModel
+@{
+
+}
+
+<!DOCTYPE html>
+<html>
+
+
+    <body>
+        <form class = "form" method="post">
+            <div class="container">
+                <label asp-for="UserLogin.UserName"><b>Username</b></label>
+                <input class = "LoginInput" asp-for="UserLogin.UserName">
+                <span class="validation-message text-danger" asp-validation-for="UserLogin.UserName"></span>
+
+                <label asp-for="UserLogin.Password"><b>Password</b></label>
+                <input class = "LoginInput" asp-for="UserLogin.Password" type="password">
+                <span class="validation-message text-danger" asp-validation-for="UserLogin.Password"></span>
+    
+                <button class = "buttonLogin" type="submit">Login</button>
+          </div>
+
+        </form>
+
+
+    </body>
+
+
+
+
+
+</html>

@@ -15,6 +15,10 @@ namespace LogicLayer
         {
             this.matchesDB = matchesDB;
         }
+        /// <summary>
+        /// Inserts matches into the database
+        /// </summary>
+        /// <param name="match"></param>
         public void AddMatch(Match match)
         {
             matchesDB.AddMatch(match);

@@ -17,11 +17,12 @@ namespace DataAccessLayer
         {
             try
             {
-                string sql = "INSERT INTO tournament (TournamentID, Location, StartDate, EndDate, MinPlayers, MaxPlayers, Type, Status) VALUES(@ID, @Sport, @Location, @StartDate, @EndDate, @MinPlayers, @MaxPlayers, @Type, @Status)";
+                string sql = "INSERT INTO tournament (TournamentID, Info, Location, StartDate, EndDate, MinPlayers, MaxPlayers, Type, Status) VALUES(@ID, @Info, @Location, @StartDate, @EndDate, @MinPlayers, @MaxPlayers, @Type, @Status)";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 conn.Open();
 
                 cmd.Parameters.AddWithValue("ID", tournament.ID);
+                cmd.Parameters.AddWithValue("Info", tournament.TournamentInfo);
                 cmd.Parameters.AddWithValue("Location", tournament.Location);
                 cmd.Parameters.AddWithValue("StartDate", tournament.StartDate);
                 cmd.Parameters.AddWithValue("EndDate", tournament.EndDate);
@@ -38,11 +39,11 @@ namespace DataAccessLayer
             }
             catch (MySqlException ex)
             {
-
+                throw;
             }
             catch(Exception ex)
             {
-
+                throw;
             }
             finally
             {
@@ -111,10 +112,10 @@ namespace DataAccessLayer
 
         public List<Tournament> ReadTournaments()
         {
+            List<Tournament> tournaments = new List<Tournament>();
 
             try
             {
-                List<Tournament> tournaments = new List<Tournament>();
                 string sql = "SELECT TournamentID, Info, Location, StartDate, EndDate, MinPlayers, MaxPlayers, Type, Status FROM tournament";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 conn.Open();
@@ -134,9 +135,9 @@ namespace DataAccessLayer
             }
             finally
             {
-
+                conn.Close();
             }
-            return null;
+            return tournaments;
         }
 
         public void UpdateTournament(Tournament tournament)

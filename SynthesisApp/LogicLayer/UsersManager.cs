@@ -72,7 +72,7 @@ namespace LogicLayer
             return users.Find(x => x.Account.Username == username && x.Account.Password == password);
         }
 
-        public bool TryLogin(string username, string password)
+        public bool TryLogin(string username, string password) //is this a good approach
         {
             foreach (User user in users)
             {
@@ -83,6 +83,42 @@ namespace LogicLayer
             }
 
             return false;
+        }
+
+        public bool CheckUsername(string username)
+        {
+            try
+            {
+                if (users.Any(u=> u.Account.Username==username))
+                {
+                    throw new Exception("Username already exists");
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public bool TryRegister(string username, string password)
+        {
+            try
+            {
+                CheckUsername(username);
+                User newUser = new User(new Account(autoIncrement.GetID(), username, password), "Your first name", "Your last name", "youremail@gmail.com", "+123456789", "User");
+                usersDB.AddUser(newUser);
+                users.Add(newUser);
+                return true;
+
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
 
 

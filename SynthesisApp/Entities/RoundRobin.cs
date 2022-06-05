@@ -9,21 +9,6 @@ namespace Entities
     public class RoundRobin : TournamentType
     {
 
-        private List<User> players = new List<User>();
-
-        public List<User> Players { get { return players; } }
-
-        public RoundRobin(List<User> players)
-        {
-            this.players = players;
-        }
-
-        public RoundRobin()
-        {
-
-        }
-
-
         public override List<Match> CreateMatches(List<User> players) 
         {
             //pri suzdavaneto na machovete, player1score i player2score shte budat 0

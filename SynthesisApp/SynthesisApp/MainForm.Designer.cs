@@ -37,7 +37,7 @@
             this.tbInfo = new System.Windows.Forms.TextBox();
             this.tbLocation = new System.Windows.Forms.TextBox();
             this.dtStartDate = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.dtEndDate = new System.Windows.Forms.DateTimePicker();
             this.tbMinPlayers = new System.Windows.Forms.TextBox();
             this.tbMaxPlayers = new System.Windows.Forms.TextBox();
             this.cbTypes = new System.Windows.Forms.ComboBox();
@@ -125,12 +125,12 @@
             this.dtStartDate.Size = new System.Drawing.Size(250, 27);
             this.dtStartDate.TabIndex = 8;
             // 
-            // dateTimePicker2
+            // dtEndDate
             // 
-            this.dateTimePicker2.Location = new System.Drawing.Point(116, 292);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(250, 27);
-            this.dateTimePicker2.TabIndex = 9;
+            this.dtEndDate.Location = new System.Drawing.Point(116, 292);
+            this.dtEndDate.Name = "dtEndDate";
+            this.dtEndDate.Size = new System.Drawing.Size(250, 27);
+            this.dtEndDate.TabIndex = 9;
             // 
             // tbMinPlayers
             // 
@@ -232,7 +232,7 @@
             this.Controls.Add(this.cbTypes);
             this.Controls.Add(this.tbMaxPlayers);
             this.Controls.Add(this.tbMinPlayers);
-            this.Controls.Add(this.dateTimePicker2);
+            this.Controls.Add(this.dtEndDate);
             this.Controls.Add(this.dtStartDate);
             this.Controls.Add(this.tbLocation);
             this.Controls.Add(this.tbInfo);
@@ -261,7 +261,7 @@
         private TextBox tbInfo;
         private TextBox tbLocation;
         private DateTimePicker dtStartDate;
-        private DateTimePicker dateTimePicker2;
+        private DateTimePicker dtEndDate;
         private TextBox tbMinPlayers;
         private TextBox tbMaxPlayers;
         private ComboBox cbTypes;

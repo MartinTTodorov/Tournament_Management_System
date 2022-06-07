@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public enum TournamentStatus
+    public class Basketball
     {
-        Open, Scheduled, Closed, Finished, Cancelled
+
     }
 }

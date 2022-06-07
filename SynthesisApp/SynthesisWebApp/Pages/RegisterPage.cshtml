@@ -9,6 +9,9 @@
 
 
     <body>
+    
+
+
         <form class = "form" method="post">
             <div class="container">
                 <label asp-for="UserRegister.UserName"><b>Username</b></label>
@@ -18,7 +21,8 @@
                 <label asp-for="UserRegister.Password"><b>Password</b></label>
                 <input class = "" asp-for="UserRegister.Password" type="password">
                 <span class="validation-message text-danger" asp-validation-for="UserRegister.Password"></span>
-    
+
+                
                 <button class = "buttonLogin" type="submit">Register</button>
           </div>
 

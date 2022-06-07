@@ -28,5 +28,11 @@ namespace LogicLayer
         {
             matchesDB.UpdateMatch(match);
         }
+
+        public void CreateMatches(Tournament tournament)
+        {
+            tournament.TournamentType.CreateMatches(tournament.PlayersInTournament);
+            
+        }
     }
 }

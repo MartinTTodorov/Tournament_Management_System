@@ -28,18 +28,13 @@ namespace Entities
         {
             ValidateName(firstName);
             ValidateName(lastName);
-            //ValidateEmail(email);
+            ValidateEmail(email);
             this.account = account;
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
             this.phone = phone;
             this.type = type;
-        }
-
-        public User(Account account)//Used when user registers. If he wishes, he can later set the rest of his information
-        {
-            this.account = account;
         }
 
         private void ValidateName(string name)

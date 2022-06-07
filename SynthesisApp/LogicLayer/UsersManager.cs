@@ -121,6 +121,11 @@ namespace LogicLayer
             }
         }
 
+        public User GetUserByID(int id)
+        {
+            return users.First(x => x.Account.ID == id);
+        }
+
 
     }
 }

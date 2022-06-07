@@ -14,6 +14,7 @@ namespace SynthesisWebApp.Pages
 
         public void OnGet()
         {
+
         }
     }
 }

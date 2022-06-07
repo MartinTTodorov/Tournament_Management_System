@@ -37,10 +37,10 @@ namespace LogicLayer
         public void AddTournament(Tournament tournament)
         {
             //creates a tournament with the appropriate ID and Status, as user doesnt set them
-            Tournament newTournament = new Tournament(autoIncrement.GetID(), tournament.TournamentType, tournament.TournamentInfo, tournament.StartDate, tournament.EndDate, tournament.MinPlayers, tournament.MaxPlayers, tournament.Location, "Open");
+            Tournament newTournament = new Tournament(autoIncrement.GetID(), tournament.TournamentType, tournament.Title, tournament.TournamentInfo, tournament.StartDate, tournament.EndDate, tournament.MinPlayers, tournament.MaxPlayers, tournament.Location, TournamentStatus.Open);
             try
             {
-                //check if a tournament with the same data exists
+                //check if a tournament with the same data exists (including ID). Maybe only check if the ID is the ssame, as the other data is not important
                 if (!tournaments.Any(t => t == newTournament)) // do this for the rest too
                 {
                     tournamentsDB.AddTournament(newTournament);
@@ -71,13 +71,40 @@ namespace LogicLayer
             tournaments.Remove(tournament);
         }
 
-        public void AddPlayer(Tournament tournament, User user)
+        public void AddPlayer(Tournament tournament, User player)
         {
 
+            tournaments.First(x=>x.ID==tournament.ID).AddPlayer(player);
+            tournamentsDB.AddPlayer(tournament, player);
         }
 
-        
+        public Tournament GetTournamentByID(int id)
+        {
+            return tournaments.First(x => x.ID == id);
+        }
 
+        /// <summary>
+        /// Generates the matches for the tournament and uploads them to the database. 
+        /// </summary>
+        /// <param name="tournament"></param>
+        public void CreateMatches(Tournament tournament) //make it a bool and if it returns true, then dislay a messagebox that it was successful  
+        {
+
+            if (tournament.TournamentStatus != TournamentStatus.Open)
+            {
+                throw new Exception($"Schedule can be generated only if the tournament is open. Current status: {tournament.TournamentStatus}");
+            }
+
+            if ((tournament.StartDate-DateTime.Now).Days>7)
+            {
+                throw new Exception("Tournament can only be scheduled 7 days prior to the start date");
+            }
+
+            //tournament.TournamentType.CreateMatches(tournament.PlayersInTournament);
+            tournament.AssignMatches(tournament.TournamentType.CreateMatches(tournament.PlayersInTournament));
+            tournamentsDB.CreateMatches(tournament);
+
+        }
 
         
     }

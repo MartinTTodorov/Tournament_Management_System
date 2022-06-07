@@ -11,5 +11,6 @@ namespace Entities
     {
         public void AddMatch(T match);
         public void UpdateMatch(T match);
+        //public void CreateMatches(Tournament tournament);
     }
 }

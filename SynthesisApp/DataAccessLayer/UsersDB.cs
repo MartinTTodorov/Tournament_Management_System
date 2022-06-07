@@ -133,14 +133,14 @@ namespace DataAccessLayer
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 conn.Open();
 
-                cmd.Parameters.AddWithValue("ID", user.Account.ID);
-                cmd.Parameters.AddWithValue("Username", user.Account.Username);
-                cmd.Parameters.AddWithValue("Password", user.Account.Password);
-                cmd.Parameters.AddWithValue("FirstName", user.FirstName);
-                cmd.Parameters.AddWithValue("LastName", user.LastName);
-                cmd.Parameters.AddWithValue("Email", user.Email);
-                cmd.Parameters.AddWithValue("Phone", user.Phone);
-                cmd.Parameters.AddWithValue("Type", user.Type);
+                cmd.Parameters.AddWithValue("@ID", user.Account.ID);
+                cmd.Parameters.AddWithValue("@Username", user.Account.Username);
+                cmd.Parameters.AddWithValue("@Password", user.Account.Password);
+                cmd.Parameters.AddWithValue("@FirstName", user.FirstName);
+                cmd.Parameters.AddWithValue("@LastName", user.LastName);
+                cmd.Parameters.AddWithValue("@Email", user.Email);
+                cmd.Parameters.AddWithValue("@Phone", user.Phone);
+                cmd.Parameters.AddWithValue("@Type", user.Type);
 
                 if (cmd.ExecuteNonQuery() == 1)
                 {

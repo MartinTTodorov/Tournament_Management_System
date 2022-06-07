@@ -12,5 +12,7 @@ namespace Entities
         public List<T> ReadTournaments();
         public void UpdateTournament(T tournament);
         public void DeleteTournament(T tournament);
+        public void AddPlayer(T tournament, User player);
+        public void CreateMatches(T tournament);
     }
 }

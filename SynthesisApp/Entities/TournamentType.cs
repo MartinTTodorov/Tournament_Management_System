@@ -10,6 +10,12 @@ namespace Entities
     public abstract class TournamentType
     {
         public static List<TournamentType> TournamentTypes { get { return GetTS(); } }
+
+        /// <summary>
+        /// Generates the matches for the tournament
+        /// </summary>
+        /// <param name="players"></param>
+        /// <returns></returns>
         public abstract List<Match> CreateMatches(List<User> players);
         public abstract override string ToString();
 

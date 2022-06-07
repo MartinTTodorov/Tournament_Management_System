@@ -29,7 +29,7 @@ namespace SynthesisApp
         {
             try
             {
-                tournamentManager.AddTournament(new Tournament(tbInfo.Text, dtStartDate.Value, dtEndDate.Value, Convert.ToInt32(tbMinPlayers.Text), Convert.ToInt32(tbMaxPlayers.Text), tbLocation.Text, (TournamentType)cbTypes.SelectedItem));
+                tournamentManager.AddTournament(new Tournament(tbInfo.Text, tbTitle.Text, dtStartDate.Value, dtEndDate.Value, Convert.ToInt32(tbMinPlayers.Text), Convert.ToInt32(tbMaxPlayers.Text), tbLocation.Text, (TournamentType)cbTypes.SelectedItem));
             }
             catch(Exception ex)
             {
@@ -44,6 +44,24 @@ namespace SynthesisApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+
+        }
+
+        private void btnGenerateMatches_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                tournamentManager.CreateMatches((Tournament)cbTournaments.SelectedItem);
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                MessageBox.Show("Successfully generated matches");
+            }
 
         }
     }

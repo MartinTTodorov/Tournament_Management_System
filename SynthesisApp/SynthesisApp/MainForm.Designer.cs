@@ -48,6 +48,9 @@
             this.lblType = new System.Windows.Forms.Label();
             this.lblStartDate = new System.Windows.Forms.Label();
             this.lblEndDate = new System.Windows.Forms.Label();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.tbTitle = new System.Windows.Forms.TextBox();
+            this.btnGenerateMatches = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cbTournaments
@@ -217,11 +220,40 @@
             this.lblEndDate.TabIndex = 19;
             this.lblEndDate.Text = "End date:";
             // 
+            // lblTitle
+            // 
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Location = new System.Drawing.Point(62, 75);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(41, 20);
+            this.lblTitle.TabIndex = 20;
+            this.lblTitle.Text = "Title:";
+            // 
+            // tbTitle
+            // 
+            this.tbTitle.Location = new System.Drawing.Point(116, 68);
+            this.tbTitle.Name = "tbTitle";
+            this.tbTitle.Size = new System.Drawing.Size(125, 27);
+            this.tbTitle.TabIndex = 21;
+            // 
+            // btnGenerateMatches
+            // 
+            this.btnGenerateMatches.Location = new System.Drawing.Point(408, 386);
+            this.btnGenerateMatches.Name = "btnGenerateMatches";
+            this.btnGenerateMatches.Size = new System.Drawing.Size(105, 50);
+            this.btnGenerateMatches.TabIndex = 22;
+            this.btnGenerateMatches.Text = "Generate matches";
+            this.btnGenerateMatches.UseVisualStyleBackColor = true;
+            this.btnGenerateMatches.Click += new System.EventHandler(this.btnGenerateMatches_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnGenerateMatches);
+            this.Controls.Add(this.tbTitle);
+            this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.lblEndDate);
             this.Controls.Add(this.lblStartDate);
             this.Controls.Add(this.lblType);
@@ -272,5 +304,8 @@
         private Label lblType;
         private Label lblStartDate;
         private Label lblEndDate;
+        private Label lblTitle;
+        private TextBox tbTitle;
+        private Button btnGenerateMatches;
     }
 }

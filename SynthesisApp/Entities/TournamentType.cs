@@ -9,7 +9,7 @@ namespace Entities
 {
     public abstract class TournamentType
     {
-        public static List<TournamentType> TournamentTypes { get { return GetTS(); } }
+        public static List<TournamentType> TournamentTypes { get { return GetTournamentTypes(); } }
 
         /// <summary>
         /// Generates the matches for the tournament
@@ -19,7 +19,7 @@ namespace Entities
         public abstract List<Match> CreateMatches(List<User> players);
         public abstract override string ToString();
 
-        private static List<TournamentType> GetTS()
+        private static List<TournamentType> GetTournamentTypes()
         {
             List<TournamentType> types = new List<TournamentType>();
             foreach (Type type in

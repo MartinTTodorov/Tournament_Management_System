@@ -14,9 +14,14 @@ namespace SynthesisWebApp.Pages
     [Authorize]
     public class TournamentPageModel : PageModel
     {
-        private TournamentManager tournamentManager = new TournamentManager(new TournamentsDB(), new TournamentsDB());
+        private TournamentManager tournamentManager;
         private UsersManager userManager = new UsersManager(new UsersDB(), new UsersDB());
         private Tournament tournament;
+
+        public TournamentPageModel(TournamentManager tournamentManager)
+        {
+            this.tournamentManager = tournamentManager;
+        }
 
         public Tournament Tournament { get { return tournament; } set { tournament = value; } }
 
@@ -32,9 +37,18 @@ namespace SynthesisWebApp.Pages
 
         public IActionResult OnPost()
         {
-            Tournament = tournamentManager.GetTournamentByID(ID);
-            User user = userManager.GetUserByID(Convert.ToInt32(User.Claims.First(x => x.Type.Equals("ID")).Value));
-            tournamentManager.AddPlayer(Tournament, user);
+            try
+            {
+                Tournament = tournamentManager.GetTournamentByID(ID);
+                User user = userManager.GetUserByID(Convert.ToInt32(User.Claims.First(x => x.Type.Equals("ID")).Value));
+                tournamentManager.AddPlayer(Tournament, user);
+
+            }
+            catch(Exception ex)
+            {
+                ViewData["Error"] = ex.Message;
+                return Page();
+            }
             return new RedirectToPageResult("Index");
         }
     }

@@ -37,7 +37,8 @@ namespace SynthesisWebApp.Pages
             }
             else
             {
-                return new RedirectToPageResult("Error");
+                ViewData["Error"] = "Wrong credentials";
+                return Page();
             }
         }
 

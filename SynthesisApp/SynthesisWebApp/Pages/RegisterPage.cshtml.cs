@@ -30,14 +30,22 @@ namespace SynthesisWebApp.Pages
 
         private IActionResult Register()
         {
-            if (userManager.TryRegister(UserRegister.UserName, UserRegister.Password))
+
+            try
             {
-                SetupSessionCookie();
-                return new RedirectToPageResult("Index");
+
+                if (userManager.TryRegister(UserRegister.UserName, UserRegister.Password))
+                {
+                    SetupSessionCookie();
+                    return new RedirectToPageResult("Index");
+                }
+                return Page();
+                
             }
-            else
+            catch (Exception ex)
             {
-                return new RedirectToPageResult("Error");
+                ViewData["Error message"] = ex.Message;
+                    return Page();
             }
         }
 

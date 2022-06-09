@@ -204,8 +204,8 @@ namespace DataAccessLayer
                 conn.Open();
 
                 DataSet ds = new DataSet();
-                MySqlDataAdapter adapter = new MySqlDataAdapter();
-                adapter.SelectCommand = cmd;
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                
                 
                 adapter.Fill(ds);
 
@@ -221,7 +221,7 @@ namespace DataAccessLayer
                     List<User> players = new List<User>();
                     for (int j = 0; j < ds.Tables[1].Rows.Count; j++)
                     {
-                        if (Convert.ToInt32(ds.Tables[1].Rows[j][0])==tournaments[i].ID) //Convert.ToInt32(ds.Tables[0].Rows[i][0])
+                        if (tournaments[i].ID == Convert.ToInt32(ds.Tables[1].Rows[j][0])) 
                         {
                             players.Add(new User(new Account(Convert.ToInt32(ds.Tables[1].Rows[j][1]), ds.Tables[1].Rows[j][2].ToString(), ds.Tables[1].Rows[j][3].ToString()), ds.Tables[1].Rows[j][4].ToString(), ds.Tables[1].Rows[j][5].ToString(), ds.Tables[1].Rows[j][6].ToString(), ds.Tables[1].Rows[j][7].ToString(), ds.Tables[1].Rows[j][8].ToString()));
                         }

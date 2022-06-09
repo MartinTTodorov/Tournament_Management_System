@@ -73,8 +73,16 @@ namespace LogicLayer
 
         public void AddPlayer(Tournament tournament, User player)
         {
+            if (tournament.TournamentStatus!=TournamentStatus.Open)
+            {
+                throw new Exception($"You cant join a tournament that is not open. This tournament's status is: {tournament.TournamentStatus}");
+            }
 
-            tournaments.First(x=>x.ID==tournament.ID).AddPlayer(player);
+            if (tournament.PlayersInTournament.Any(x=>x.Account.ID==player.Account.ID))
+            {
+                throw new Exception("You have already joined this tournament");
+            }
+            tournament.AddPlayer(player);
             tournamentsDB.AddPlayer(tournament, player);
         }
 

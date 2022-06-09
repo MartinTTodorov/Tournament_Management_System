@@ -11,11 +11,11 @@ namespace Entities
 
         public override List<Match> CreateMatches(List<User> players)
         {
-            //pri suzdavaneto na machovete, player1score i player2score shte budat 0
-            //a posle kato se igraqt samite machove, kato zavurshat, shte gi updatevam v bazata danni s rezultata i
+            //If the number of players is odd, add a dummy/bye player
+            //Later if the bye player has to play against someone, we dont add that match
             if (players.Count % 2 == 1)
             {
-                players.Add(new User(new Account(5100, "Bye", "Bye"), "Bye", "Bye", "Bye", "Bye", "Bye"));
+                players.Add(new User(new Account(9999, "Bye", "Bye"), "Bye", "Bye", "Bye", "Bye", "Bye"));
             }
             List<Match> matches = new List<Match>();
             int half = players.Count / 2;
@@ -38,7 +38,7 @@ namespace Entities
             return matches;
         }
 
-        public void RotateList(List<User> players)
+        private void RotateList(List<User> players)
         {
             User lastUser = players[players.Count - 1];
             players.RemoveAt(players.Count - 1);

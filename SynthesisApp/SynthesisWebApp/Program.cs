@@ -1,6 +1,14 @@
+using LogicLayer;
+using Entities;
+using DataAccessLayer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddTransient<ITournaments<Tournament>, TournamentsDB>();
+builder.Services.AddTransient<IAutoIncrement, TournamentsDB>();
+
+builder.Services.AddSingleton<TournamentManager>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();

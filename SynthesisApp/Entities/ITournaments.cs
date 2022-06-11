@@ -14,5 +14,6 @@ namespace Entities
         public void DeleteTournament(T tournament);
         public void AddPlayer(T tournament, User player);
         public void CreateMatches(T tournament);
+        public List<Match> RetrieveMatches(T tournament);
     }
 }

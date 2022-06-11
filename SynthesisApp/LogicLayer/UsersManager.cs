@@ -126,6 +126,18 @@ namespace LogicLayer
             return users.First(x => x.Account.ID == id);
         }
 
+        public User GetUserByUsername(string username)
+        {
+            if (!users.Any(x=>x.Account.Username==username))
+            {
+                throw new Exception("No such username exists");
+            }
+            else
+            {
+                return users.First(x => x.Account.Username == username);
+            }
+        }
+
 
     }
 }

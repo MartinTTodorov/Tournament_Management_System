@@ -88,7 +88,15 @@ namespace LogicLayer
 
         public Tournament GetTournamentByID(int id)
         {
-            return tournaments.First(x => x.ID == id);
+            if (tournaments.Any(x=>x.ID==id))
+            {
+                return tournaments.First(x => x.ID == id);
+            }
+            else
+            {
+                throw new Exception($"Tournament with ID {id} doesn't exist");
+            }
+
         }
 
         /// <summary>
@@ -112,6 +120,16 @@ namespace LogicLayer
             tournament.AssignMatches(tournament.TournamentType.CreateMatches(tournament.PlayersInTournament));
             tournamentsDB.CreateMatches(tournament);
 
+        }
+
+        public void RetrieveMatches(Tournament tournament)
+        {
+            if (tournament.TournamentStatus==TournamentStatus.Open || tournament.TournamentStatus==TournamentStatus.Cancelled)
+            {
+                throw new Exception($"You can see the matches for scheduled or concluded tournaments. This tournament's status: {tournament.TournamentStatus}");
+            }
+
+            tournament.AssignMatches(tournamentsDB.RetrieveMatches(tournament));
         }
 
         

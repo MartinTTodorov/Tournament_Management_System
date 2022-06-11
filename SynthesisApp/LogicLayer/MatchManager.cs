@@ -24,10 +24,14 @@ namespace LogicLayer
             matchesDB.AddMatch(match);
         }
 
-        public void UpdateMatch(Match match)
+        public void SetMatchResults(Tournament tournament, Match match, int player1Score, int player2Score)
         {
-            matchesDB.UpdateMatch(match);
+            
+            match.SetResults(player1Score, player2Score);
+            matchesDB.SetMatchResults(match);
+
         }
+
 
         public void CreateMatches(Tournament tournament)
         {

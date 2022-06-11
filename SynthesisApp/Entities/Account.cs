@@ -23,5 +23,7 @@ namespace Entities
             this.password = password;
         }
 
+        
+
     }
 }

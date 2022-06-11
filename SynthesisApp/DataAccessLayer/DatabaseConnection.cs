@@ -7,9 +7,9 @@ using MySql.Data.MySqlClient;
 
 namespace DataAccessLayer
 {
-    internal class DatabaseConnection
+    public static class DatabaseConnection
     {
-        public MySqlConnection GetConnection()
+        public static MySqlConnection GetConnection()
         {
             return new MySqlConnection("Server = studmysql01.fhict.local; Uid=dbi481796;Database=dbi481796;Pwd=sql7915");
         }

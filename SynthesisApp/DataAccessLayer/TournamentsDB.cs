@@ -192,7 +192,7 @@ namespace DataAccessLayer
         /// <summary>
         /// 
         /// </summary>
-        /// <returns>List of tournaments with the players and matches if there are any</returns>
+        /// <returns>List of tournaments with the players if there are any</returns>
         public List<Tournament> ReadTournaments()
         {
             List<Tournament> tournaments = new List<Tournament>();
@@ -263,6 +263,59 @@ namespace DataAccessLayer
                 conn.Close();
             }
             return tournaments;
+        }
+
+        public List<Match> RetrieveMatches(Tournament tournament)
+        {
+            List<Match> matches = new List<Match>();
+            try
+            {
+                User player1 = null;
+                User player2 = null;
+                string sql = "Select TournamentID, MatchID, Player1ID, Player2ID, Player1Score, Player2Score FROM synwholetournaments WHERE TournamentID=@ID; SELECT ID, Username, Password, FirstName, LastName, Email, Phone, Type FROM synaccounts";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                conn.Open();
+                cmd.Parameters.AddWithValue("@ID", tournament.ID);
+                DataSet ds = new DataSet();
+                
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                adapter.Fill(ds);
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    for (int j = 0; j < ds.Tables[1].Rows.Count; j++)
+                    {
+                        if (Convert.ToInt32(ds.Tables[0].Rows[i][2])==Convert.ToInt32(ds.Tables[1].Rows[j][0]))
+                        {
+                            player1 = new User(new Account(Convert.ToInt32(ds.Tables[1].Rows[j][0]), ds.Tables[1].Rows[j][1].ToString(), ds.Tables[1].Rows[j][2].ToString()), ds.Tables[1].Rows[j][3].ToString(), ds.Tables[1].Rows[j][4].ToString(), ds.Tables[1].Rows[j][5].ToString(), ds.Tables[1].Rows[j][6].ToString(), ds.Tables[1].Rows[j][7].ToString());
+                        }
+
+                        if (Convert.ToInt32(ds.Tables[0].Rows[i][3]) == Convert.ToInt32(ds.Tables[1].Rows[j][0]))
+                        {
+                            player2 = new User(new Account(Convert.ToInt32(ds.Tables[1].Rows[j][0]), ds.Tables[1].Rows[j][1].ToString(), ds.Tables[1].Rows[j][2].ToString()), ds.Tables[1].Rows[j][3].ToString(), ds.Tables[1].Rows[j][4].ToString(), ds.Tables[1].Rows[j][5].ToString(), ds.Tables[1].Rows[j][6].ToString(), ds.Tables[1].Rows[j][7].ToString());
+                        }
+                    }
+
+                    matches.Add(new Match(Convert.ToInt32(ds.Tables[0].Rows[i][1]), player1, player2, Convert.ToInt32(ds.Tables[0].Rows[i][4]), Convert.ToInt32(ds.Tables[0].Rows[i][5])));
+                }
+
+                
+
+            }
+            catch (MySqlException ex)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return matches;
+
         }
 
         public void UpdateTournament(Tournament tournament)

@@ -23,7 +23,7 @@ namespace SynthesisWebApp.Pages
             this.tournamentManager = tournamentManager;
         }
 
-        public Tournament Tournament { get { return tournament; } set { tournament = value; } }
+        public Tournament Tournament { get { return tournament; } private set { tournament = value; } }
 
         [BindProperty]
         public int ID { get; set; }

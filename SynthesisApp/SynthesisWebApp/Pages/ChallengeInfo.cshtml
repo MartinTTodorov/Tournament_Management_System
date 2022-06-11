@@ -1,0 +1,25 @@
+﻿@page
+@model SynthesisWebApp.Pages.ChallengeInfoModel
+@{
+}
+
+<p> Challenge by: @Model.Challenge.ChallengerID</p> 
+
+
+@if (@Model.Challenge.Status=="Awaiting")
+{
+    <form class="form" method = "post">
+        <button class = "buttonAccept" type="submit">Accept</button>
+        <p> @ViewData["Error"]</p>
+    </form>
+
+    <form class="form" method = "post">
+        <button class = "buttonDeny" type="submit">Deny</button>
+        <p> @ViewData["Error"]</p>
+    </form>
+
+}
+else if (@Model.Challenge.Status == "Accepted")
+{
+    
+}

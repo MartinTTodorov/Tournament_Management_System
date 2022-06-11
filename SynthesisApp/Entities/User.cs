@@ -55,5 +55,10 @@ namespace Entities
             }
         }
 
+        public override string ToString()
+        {
+            return $"{this.FirstName}";
+        }
+
     }
 }

@@ -2,3 +2,49 @@
 @model SynthesisWebApp.Pages.ChallengesModel
 @{
 }
+
+<body>
+        <form class = "form" method="post">
+            <div class="container">
+                <label asp-for="ChallengeUser.UserName"><b>Username</b></label>
+                <input class = "LoginInput" asp-for="ChallengeUser.UserName">
+                <span class="validation-message text-danger" asp-validation-for="ChallengeUser.UserName"></span>
+
+    
+                <button class = "buttonChallenge" type="submit">Challenge</button>
+          </div>
+
+        </form>
+
+        <div>
+
+
+            <div class = "challenges">
+
+                <p>Your challenges:</p>
+
+            @for(int i=0; i<@ChallengesModel.UserChallenges.Count; i++)
+            {
+
+                <div class="Challenge">
+
+                    <div class="tournament-text">
+                        <p>Challenge from @ChallengesModel.UserChallenges[i].ChallengerID</p>
+                        
+                        <a href = "/ChallengeInfo?ID=@ChallengesModel.UserChallenges[i].ID">View</a>
+                    </div>
+
+                </div>
+            }
+
+            </div>
+
+            <div class = "pastChallenges">
+
+                <p>Your past challenges:</p>
+            </div>
+
+        </div>
+
+
+</body>

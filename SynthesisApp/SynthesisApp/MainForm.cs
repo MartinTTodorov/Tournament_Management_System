@@ -16,10 +16,11 @@ namespace SynthesisApp
     public partial class MainForm : Form
     {
         TournamentManager tournamentManager = new TournamentManager(new TournamentsDB(), new TournamentsDB());
+        MatchManager matchManager = new MatchManager(new MatchesDB());
         public MainForm()
         {
             InitializeComponent();
-            cbTournaments.DataSource = tournamentManager.Tournaments;
+            lblTournaments.DataSource = tournamentManager.Tournaments;
             cbTypes.DataSource = TournamentType.TournamentTypes;
             
 
@@ -39,7 +40,8 @@ namespace SynthesisApp
 
         private void cbTournaments_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cbMatches.DataSource = null;
+            
+            
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -51,17 +53,62 @@ namespace SynthesisApp
         {
             try
             {
-                tournamentManager.CreateMatches((Tournament)cbTournaments.SelectedItem);
+                tournamentManager.CreateMatches((Tournament)lblTournaments.SelectedItem);
+                MessageBox.Show("Successfully generated matches");
 
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            finally
+            
+
+        }
+
+        private void btnSaveResults_Click(object sender, EventArgs e)
+        {
+            Tournament tournament = (Tournament)lblTournaments.SelectedItem;
+            Match match = (Match)lblMatches.SelectedItem;
+            try
             {
-                MessageBox.Show("Successfully generated matches");
+                matchManager.SetMatchResults(tournament, match, Convert.ToInt32(tbPlayer1Score.Text), Convert.ToInt32(tbPlayer2Score.Text));
+
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void lblTournaments_DoubleClick(object sender, EventArgs e)
+        {
+            Tournament tournament = (Tournament)lblTournaments.SelectedItem;
+            try
+            {
+                //only load them if they are not already loaded
+                if (tournament.Matches==null) // should this validation be in the manager
+                {
+                    tournamentManager.RetrieveMatches(tournament);
+                }
+                lblMatches.DataSource = tournament.Matches;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void lblMatches_DoubleClick(object sender, EventArgs e)
+        {
+            Match match = (Match)lblMatches.SelectedItem;
+            lblPlayer1.Text = match.Player1.Account.Username;
+            lblPlayer2.Text = match.Player2.Account.Username;
+            tbPlayer1Score.Text = match.Player1Score.ToString();
+            tbPlayer2Score.Text = match.Player2Score.ToString();
+        }
+
+        private void lblTournaments_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
     }

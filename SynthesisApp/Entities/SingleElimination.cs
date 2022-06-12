@@ -8,7 +8,7 @@ namespace Entities
 {
     public class SingleElimination : TournamentType
     {
-        public override List<Match> CreateMatches(List<User> players)
+        public override List<Match> CreateMatches(Tournament tournament)
         {
             throw new NotImplementedException();
         }

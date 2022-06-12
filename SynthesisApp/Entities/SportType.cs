@@ -9,11 +9,11 @@ namespace Entities
 {
     public abstract class SportType
     {
-        public static List<SportType> MatchTypes { get { return GetMatchTypes(); } }
+        public static List<SportType> SportTypes { get { return GetSportTypes(); } }
         public abstract void ValidateResults( int score1, int score2);
         public abstract override string ToString();
 
-        private static List<SportType> GetMatchTypes()
+        private static List<SportType> GetSportTypes()
         {
             List<SportType> types = new List<SportType>();
             foreach (Type type in

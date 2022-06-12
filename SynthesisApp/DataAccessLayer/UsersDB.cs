@@ -8,11 +8,15 @@ using MySql.Data.MySqlClient;
 
 namespace DataAccessLayer
 {
-    public class UsersDB : IUsers<User>, IAutoIncrement
+    public class UsersDB : IUsers, IAutoIncrement
     {
 
-        private MySqlConnection conn = new MySqlConnection("Server = studmysql01.fhict.local; Uid=dbi481796;Database=dbi481796;Pwd=sql7915");
+        private MySqlConnection conn;
 
+        public UsersDB()
+        {
+            conn = DatabaseConnection.GetConnection();
+        }
 
         public void AddUser(User user)
         {

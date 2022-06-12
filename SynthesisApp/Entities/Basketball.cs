@@ -12,7 +12,7 @@ namespace Entities
 
         public override string ToString()
         {
-            throw new NotImplementedException();
+            return "Basketball";
         }
 
         public override void ValidateResults(int score1, int score2)

@@ -4,8 +4,36 @@
 }
 
 <form class="form" method = "post">
-    <p>@Model.Tournament.TournamentInfo</p> 
+    <h6> Tournament info: @Model.Tournament.TournamentInfo</h6> 
+    <h4> Current tournament status: @Model.Tournament.TournamentStatus</h4>
+    <h3>This tournament starts on @Model.Tournament.StartDate.ToShortDateString() and ends on @Model.Tournament.EndDate.ToShortDateString()</h3>
+    <h4> Current number of players: @Model.Tournament.PlayersInTournament.Count</h4>
+    <h4>Min players required: @Model.Tournament.MinPlayers</h4>
+    <h4>Max players: @Model.Tournament.MaxPlayers</h4>
     <button class = "buttonLogin" type="submit">Join</button>
 
-    <p> @ViewData["Error"]</p>
+    @if (1==1)
+    {
+        
+    }
+
+    
+    @if (@Model.Tournament.TournamentStatus!=Entities.TournamentStatus.Open && @Model.Tournament.TournamentStatus!=Entities.TournamentStatus.Cancelled)
+    {
+    <h5>Matches for this tournament </h5>
+        @foreach ( Entities.Match match in @Model.Tournament.Matches )
+        {
+            <p>@match.Player1.Account.Username vs @match.Player2.Account.Username  Scores: @match.Player1Score / @match.Player2Score</p>
+            
+            <p>@ViewData["Error"]</p>
+        }
+        
+    }
+
+
+    
+
+
+
+    
 </form>

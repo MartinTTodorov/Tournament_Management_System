@@ -12,7 +12,7 @@ namespace SynthesisWebApp.Pages
         private TournamentManager tournamentManager = new TournamentManager(new TournamentsDB(), new TournamentsDB());
         private List<Tournament> tournaments;
 
-        public List<Tournament> Tournaments { get { return tournaments; } set { tournaments = value; } }
+        public List<Tournament> Tournaments { get { return tournaments; } private set { tournaments = value; } }
         
 
         public IndexModel(ILogger<IndexModel> logger)
@@ -22,7 +22,7 @@ namespace SynthesisWebApp.Pages
 
         public void OnGet()
         {
-            Tournaments = tournamentManager.Tournaments;
+            Tournaments = tournamentManager.Tournaments.ToList();
         }
     }
 }

@@ -11,10 +11,8 @@
         <div class="tournament">
 
                 <div class="tournament-text">
-                    <span> placeholder</span>
-                    <a href="/TournamentPage?ID=@Model.Tournaments[i].ID" class="tournament-title">@Model.Tournaments[i].Title</a>
-                    <p>placeholder</p>
-                    <a href = "/TournamentPage?ID=@Model.Tournaments[i].ID">View</a>
+                    <a href="/TournamentPage?ID=@Model.Tournaments[i].ID" class="tournament-title">Tournament @Model.Tournaments[i].ID @Model.Tournaments[i].Title</a>
+                    <p>From @Model.Tournaments[i].EndDate.ToShortDateString() to @Model.Tournaments[i].EndDate.ToShortDateString()</p>
                 </div>
         </div>
     }

@@ -13,7 +13,7 @@ namespace Entities
         private User player2;
         private int player1Score;
         private int player2Score;
-        //private SportType sport;
+        private SportType sport;
         //type that may be tournament match or challenge match
 
         public int ID { get { return id; } }
@@ -21,17 +21,18 @@ namespace Entities
         public User Player2 { get { return player2; } }
         public int Player1Score { get { return player1Score; } }
         public int Player2Score { get { return player2Score; } }
-        //public SportType Sport { get { return sport; } }
+        public SportType Sport { get { return sport; } }
 
-        public Match(int id, User player1, User player2, int player1Score, int player2Score) //Validate when pulling matches from DB
+        public Match(int id, User player1, User player2, int player1Score, int player2Score, SportType sport) 
         {
-            //sport.ValidateResults(player1Score, player2Score);
+            
 
             this.id = id;
             this.player1 = player1;
             this.player2 = player2;
             this.player1Score = player1Score;
             this.player2Score = player2Score;
+            this.sport = sport;
         }
         
 
@@ -42,87 +43,31 @@ namespace Entities
         /// <param name="player2"></param>
         /// <param name="player1Score"></param>
         /// <param name="player2Score"></param>
-        public Match(User player1, User player2, int player1Score, int player2Score)
+        public Match(User player1, User player2, int player1Score, int player2Score, SportType sport)
         {
             
             this.player1 = player1;
             this.player2 = player2;
             this.player1Score = player1Score;
             this.player2Score = player2Score;
+            this.sport = sport;
+        }
+
+        public Match(int player1Score, int player2Score, SportType sport)
+        {
+            this.player1Score = player2Score;
+            this.player2Score = player2Score;
+            this.sport = sport;
         }
 
         public void SetResults(int p1Score, int p2Score)
         {
-            //sport.ValidateResults(p1Score, p2Score);
-            ValidateResults(p1Score, p2Score);
+            sport.ValidateResults(p1Score, p2Score);
             this.player1Score = p1Score;
             this.player2Score = p2Score;
         }
 
-        public void ValidateResults(int score1, int score2)
-        {
-            if (score1<=0 || score2 <=0)
-            {
-                throw new Exception("Scores can only be positive");
-            }
-            List<int> playerScores = new List<int>(new int[] { score1, score2 });
-            for (int i = 0; i < playerScores.Count; i++)
-            {
-                if ((playerScores[0] >= 21 && playerScores[0] <= 29 && playerScores[0] - playerScores[1] == 2) || (playerScores[0] == 21 && playerScores[1]<19) || (playerScores[0] == 29 && playerScores[1] == 30))
-                {
-                    break;
-                }
-                else
-                {
-                    if (i==0)
-                    {
-                        playerScores.Reverse(); //check for the other one
-
-                    }
-                    else
-                    {
-                        throw new Exception("Input scores are invalid");
-
-                    }
-                    
-                }
-
-            }
-
-            //if (((score1>=21 || score2>=21) && (score1<20 || score2<20)) || ((score1>=21 || score2>=21) && (score2-score1==2 || score1-score2==2)) || ((score1==29 || score2==29) && (score1==30 || score2==30)))
-            //{
-
-            //}
-            //else
-            //{
-            //    throw new Exception("Input scores are invalid");
-            //}
-
-            //for (int i = 0; i < playerScores.Count; i++)
-            //{
-            //    if (playerScores[0]-playerScores[1]<2 && playerScores[0]>=21)
-            //    {
-            //        break;
-            //    }
-            //    else
-            //    {
-            //        if (i == 0)
-            //        {
-            //            playerScores.Reverse();
-
-            //        }
-            //        else
-            //        {
-            //            throw new Exception("Input scores are invalid");
-
-            //        }
-
-            //    }
-
-            //}
-
-
-        }
+        
 
         public override string ToString()
         {

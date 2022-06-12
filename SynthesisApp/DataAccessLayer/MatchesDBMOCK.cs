@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Entities;
 
-namespace Entities
+namespace DataAccessLayer
 {
-    public interface ImatchesDB<T>
+    public class MatchesDBMOCK
     {
-        public void AddMatch(T match);
-        public void SetMatchResults(T match);
+
     }
 }

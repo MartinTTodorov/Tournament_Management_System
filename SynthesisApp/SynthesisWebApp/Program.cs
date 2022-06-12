@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddTransient<ITournaments<Tournament>, TournamentsDB>();
+builder.Services.AddTransient<ITournaments, TournamentsDB>();
 builder.Services.AddTransient<IAutoIncrement, TournamentsDB>();
 
 builder.Services.AddSingleton<TournamentManager>();

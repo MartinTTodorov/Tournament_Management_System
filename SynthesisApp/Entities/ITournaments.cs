@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public interface ITournaments<T>
+    public interface ITournaments
     {
-        public void AddTournament(T tournament);
-        public List<T> ReadTournaments();
-        public void UpdateTournament(T tournament);
-        public void DeleteTournament(T tournament);
-        public void AddPlayer(T tournament, User player);
-        public void CreateMatches(T tournament);
-        public List<Match> RetrieveMatches(T tournament);
+        public void AddTournament(Tournament tournament);
+        public List<Tournament> ReadTournaments();
+        public void UpdateTournament(Tournament tournament);
+        public void DeleteTournament(Tournament tournament);
+        public void AddPlayer(Tournament tournament, User player);
+        public void CreateMatches(Tournament tournament);
+        public void CancelTournament(Tournament tournament);
+        public List<Match> RetrieveMatches(Tournament tournament);
+        public void FinishTournament(Tournament tournament);
     }
 }

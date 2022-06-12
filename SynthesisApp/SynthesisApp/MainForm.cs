@@ -20,9 +20,9 @@ namespace SynthesisApp
         public MainForm()
         {
             InitializeComponent();
-            lblTournaments.DataSource = tournamentManager.Tournaments;
             cbTypes.DataSource = TournamentType.TournamentTypes;
-            
+            cbSports.DataSource = SportType.SportTypes;
+            UpdateUI();
 
         }
 
@@ -30,7 +30,9 @@ namespace SynthesisApp
         {
             try
             {
-                tournamentManager.AddTournament(new Tournament(tbInfo.Text, tbTitle.Text, dtStartDate.Value, dtEndDate.Value, Convert.ToInt32(tbMinPlayers.Text), Convert.ToInt32(tbMaxPlayers.Text), tbLocation.Text, (TournamentType)cbTypes.SelectedItem));
+                tournamentManager.AddTournament(new Tournament(tbInfo.Text, tbTitle.Text, dtStartDate.Value, dtEndDate.Value, Convert.ToInt32(tbMinPlayers.Text), Convert.ToInt32(tbMaxPlayers.Text), tbLocation.Text, (TournamentType)cbTypes.SelectedItem, (SportType)cbSports.SelectedItem));
+                UpdateUI();
+                MessageBox.Show("Tournament was created successfully");
             }
             catch(Exception ex)
             {
@@ -53,7 +55,7 @@ namespace SynthesisApp
         {
             try
             {
-                tournamentManager.CreateMatches((Tournament)lblTournaments.SelectedItem);
+                tournamentManager.CreateMatches((Tournament)lblTournamentsInfo.SelectedItem);
                 MessageBox.Show("Successfully generated matches");
 
             }
@@ -67,26 +69,49 @@ namespace SynthesisApp
 
         private void btnSaveResults_Click(object sender, EventArgs e)
         {
-            Tournament tournament = (Tournament)lblTournaments.SelectedItem;
-            Match match = (Match)lblMatches.SelectedItem;
-            try
+            if (lblTournaments.SelectedIndex==-1)
             {
-                matchManager.SetMatchResults(tournament, match, Convert.ToInt32(tbPlayer1Score.Text), Convert.ToInt32(tbPlayer2Score.Text));
+                MessageBox.Show("Please select a tournament");
+            }
+            else
+            {
 
+                Tournament tournament = (Tournament)lblTournaments.SelectedItem;
+                Match match = (Match)lblMatches.SelectedItem;
+                try
+                {
+                    matchManager.SetMatchResults(tournament, match, Convert.ToInt32(tbPlayer1Score.Text), Convert.ToInt32(tbPlayer2Score.Text));
+                    if (tournamentManager.CheckForFinish(tournament))
+                    {
+                        MessageBox.Show("The last result for this tournament was registered and the tournament is now finished!");
+                    }
+                    UpdateUI();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+
         }
 
         private void lblTournaments_DoubleClick(object sender, EventArgs e)
         {
+            
+        }
+
+        private void lblMatches_DoubleClick(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void lblTournaments_SelectedIndexChanged(object sender, EventArgs e)
+        {
             Tournament tournament = (Tournament)lblTournaments.SelectedItem;
             try
             {
-                //only load them if they are not already loaded
-                if (tournament.Matches==null) // should this validation be in the manager
+                //only loads them if they are not already loaded
+                if (tournament.Matches == null)
                 {
                     tournamentManager.RetrieveMatches(tournament);
                 }
@@ -98,8 +123,63 @@ namespace SynthesisApp
             }
         }
 
-        private void lblMatches_DoubleClick(object sender, EventArgs e)
+        public void UpdateUI()
         {
+
+            lblTournaments.Items.Clear();
+            lblTournamentsInfo.Items.Clear();
+
+            foreach (Tournament tournament in tournamentManager.Tournaments)
+            {
+                lblTournaments.Items.Add(tournament);
+                lblTournamentsInfo.Items.Add(tournament);
+            }
+        }
+
+        private void lblTournamentsInfo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Tournament tournament = (Tournament)lblTournamentsInfo.SelectedItem;
+
+            tbTitle.Text = tournament.Title;
+            tbLocation.Text = tournament.Location;
+            tbMinPlayers.Text = tournament.MinPlayers.ToString();
+            tbMaxPlayers.Text = tournament.MaxPlayers.ToString();
+            tbInfo.Text = tournament.TournamentInfo;
+            dtStartDate.Value = tournament.StartDate;
+            dtEndDate.Value = tournament.EndDate;
+            cbTypes.SelectedItem = tournament.TournamentType;
+            cbSports.SelectedItem = tournament.Sport;
+        }
+
+        private void btnDeleteTournament_Click(object sender, EventArgs e)
+        {
+
+            if (lblTournamentsInfo.SelectedIndex==-1)
+            {
+                MessageBox.Show("Please select a tournament first");
+            }
+            else
+            {
+                try
+                {
+                    tournamentManager.DeleteTournament((Tournament)lblTournamentsInfo.SelectedItem);
+                    UpdateUI();
+                    MessageBox.Show("Deleted successfully");
+
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+            }
+
+
+        }
+
+        private void lblMatches_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
             Match match = (Match)lblMatches.SelectedItem;
             lblPlayer1.Text = match.Player1.Account.Username;
             lblPlayer2.Text = match.Player2.Account.Username;
@@ -107,7 +187,7 @@ namespace SynthesisApp
             tbPlayer2Score.Text = match.Player2Score.ToString();
         }
 
-        private void lblTournaments_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnCancelTournament_Click(object sender, EventArgs e)
         {
 
         }

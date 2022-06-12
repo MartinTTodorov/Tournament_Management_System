@@ -3,23 +3,41 @@
 @{
 }
 
-<p> Challenge by: @Model.Challenge.ChallengerID</p> 
+<p> Challenge by: User with an ID of @ChallengeInfoModel.Challenge.ChallengerID</p> 
+<p> This challenge is for @ChallengeInfoModel.Challenge.Date.ToShortDateString()</p>
 
-
-@if (@Model.Challenge.Status=="Awaiting")
+<p> @ViewData["Error"]</p>
+@if (@ChallengeInfoModel.Challenge.Status == "Awaiting")
 {
     <form class="form" method = "post">
-        <button class = "buttonAccept" type="submit">Accept</button>
-        <p> @ViewData["Error"]</p>
+        <button class = "buttonAccept" asp-page-handler="AcceptChallenge">Accept</button>
+        
     </form>
 
     <form class="form" method = "post">
-        <button class = "buttonDeny" type="submit">Deny</button>
-        <p> @ViewData["Error"]</p>
-    </form>
+        <button class = "buttonDeny" asp-page-handler="DenyChallenge">Deny</button>
 
+    </form>
 }
-else if (@Model.Challenge.Status == "Accepted")
+else if (@ChallengeInfoModel.Challenge.Status == "Accepted")
 {
-    
+    <form class = "form" method="post">
+        <div class="container">
+            <label asp-for="ChallengeResults.ChallengerScore"><b>Challenger score:</b></label>
+            <input class = "Challenger" asp-for="ChallengeResults.ChallengerScore">
+            <span class="validation-message text-danger" asp-validation-for="ChallengeResults.ChallengerScore"></span>
+
+            <label asp-for="ChallengeResults.OpponentScore"><b>Your score:</b></label>
+            <input class = "Opponent" asp-for="ChallengeResults.OpponentScore">
+            <span class="validation-message text-danger" asp-validation-for="ChallengeResults.OpponentScore"></span>
+
+            <button class = "buttonSetResults" asp-page-handler="SetResults">Save results</button>
+        </div>
+
+    </form>
+}
+else if (@ChallengeInfoModel.Challenge.Status == "Finished")
+{
+    <label>Challenger score: @ChallengeInfoModel.Challenge.Match.Player1Score</label>
+    <label>Your score: @ChallengeInfoModel.Challenge.Match.Player2Score</label>
 }

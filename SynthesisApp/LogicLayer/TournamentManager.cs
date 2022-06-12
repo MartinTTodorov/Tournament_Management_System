@@ -9,13 +9,13 @@ namespace LogicLayer
 {
     public class TournamentManager
     {
-        private List<Tournament> tournaments; //Should it be read only
-        private ITournaments<Tournament> tournamentsDB;
+        private List<Tournament> tournaments;
+        private ITournaments tournamentsDB;
         IAutoIncrement autoIncrement;
 
-        public List<Tournament> Tournaments { get { return tournaments; } private set { tournaments = value; } }
+        public IList<Tournament> Tournaments { get { return tournaments.AsReadOnly(); } private set { tournaments = value.ToList(); } }
 
-        public TournamentManager(ITournaments<Tournament> tournamentsDB, IAutoIncrement autoIncrement)
+        public TournamentManager(ITournaments tournamentsDB, IAutoIncrement autoIncrement)
         {
             this.tournamentsDB = tournamentsDB;
             this.autoIncrement = autoIncrement;
@@ -36,39 +36,46 @@ namespace LogicLayer
 
         public void AddTournament(Tournament tournament)
         {
+            if ((tournament.StartDate-DateTime.Now).Days<6)
+            {
+                throw new Exception("Tournament can only be created at least a week after the current date");
+            }
+
             //creates a tournament with the appropriate ID and Status, as user doesnt set them
-            Tournament newTournament = new Tournament(autoIncrement.GetID(), tournament.TournamentType, tournament.Title, tournament.TournamentInfo, tournament.StartDate, tournament.EndDate, tournament.MinPlayers, tournament.MaxPlayers, tournament.Location, TournamentStatus.Open);
-            try
+            Tournament newTournament = new Tournament(autoIncrement.GetID(), tournament.TournamentType, tournament.Title, tournament.TournamentInfo, tournament.StartDate, tournament.EndDate, tournament.MinPlayers, tournament.MaxPlayers, tournament.Location, tournament.Sport, TournamentStatus.Open);
+            
+                //check if a tournament with the same data exists (ID)
+            if (!tournaments.Any(t => t.ID == newTournament.ID)) 
             {
-                //check if a tournament with the same data exists (including ID). Maybe only check if the ID is the ssame, as the other data is not important
-                if (!tournaments.Any(t => t == newTournament)) // do this for the rest too
-                {
-                    tournamentsDB.AddTournament(newTournament);
-                    tournaments.Add(newTournament);
-                }
-                else
-                {
-                    throw new Exception("The tournament already exists");
-                }
+                tournamentsDB.AddTournament(newTournament);
+                tournaments.Add(newTournament);
             }
-            catch(Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message);
+                throw new Exception("The tournament already exists");
             }
+            
         }
 
-        public void UpdateTournament(Tournament tournament)
-        {
-            //check tournament status
-            tournamentsDB.UpdateTournament(tournament);
-
-        }
+        
 
         public void DeleteTournament(Tournament tournament)
         {
             //check if the tournament exists in the list and then delete it
-            tournamentsDB.DeleteTournament(tournament);
-            tournaments.Remove(tournament);
+            if (!tournaments.Any(x => x.ID == tournament.ID))
+            {
+                throw new Exception("The tournament does not exist");
+            }
+
+            if (tournament.TournamentStatus==TournamentStatus.Open && tournament.PlayersInTournament.Count==0)
+            {
+                tournamentsDB.DeleteTournament(tournament);
+                tournaments.Remove(tournaments.First(x=>x.ID==tournament.ID));
+            }
+            else
+            {
+                throw new Exception($"You can't delete a tournament that is not open or has players that have entered. Current tournament is {tournament.TournamentStatus} and has {tournament.PlayersInTournament.Count} players. You can try to cancel the tournament");
+            }
         }
 
         public void AddPlayer(Tournament tournament, User player)
@@ -86,6 +93,22 @@ namespace LogicLayer
             tournamentsDB.AddPlayer(tournament, player);
         }
 
+        public bool CheckForFinish(Tournament tournament)
+        {
+            if (tournament.Matches.TrueForAll(x=>x.Player1Score!=0))
+            {
+                Tournament newTournament = new Tournament(tournament.ID, tournament.TournamentType, tournament.Title, tournament.TournamentInfo, tournament.StartDate, tournament.EndDate, tournament.MinPlayers, tournament.MaxPlayers, tournament.Location, tournament.Sport, TournamentStatus.Finished);
+                tournaments.Remove(tournament);
+                tournaments.Add(newTournament);
+                tournamentsDB.FinishTournament(tournament);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
         public Tournament GetTournamentByID(int id)
         {
             if (tournaments.Any(x=>x.ID==id))
@@ -103,8 +126,9 @@ namespace LogicLayer
         /// Generates the matches for the tournament and uploads them to the database. 
         /// </summary>
         /// <param name="tournament"></param>
-        public void CreateMatches(Tournament tournament) //make it a bool and if it returns true, then dislay a messagebox that it was successful  
+        public void CreateMatches(Tournament tournament)
         {
+
 
             if (tournament.TournamentStatus != TournamentStatus.Open)
             {
@@ -116,10 +140,29 @@ namespace LogicLayer
                 throw new Exception("Tournament can only be scheduled 7 days prior to the start date");
             }
 
-            //tournament.TournamentType.CreateMatches(tournament.PlayersInTournament);
-            tournament.AssignMatches(tournament.TournamentType.CreateMatches(tournament.PlayersInTournament));
+            if (tournament.PlayersInTournament.Count<tournament.MinPlayers)
+            {
+                CancellTournament(tournament);
+
+                throw new Exception($"The tournament did not reach the minimum number of players when it was time to create the matches, so tournament with ID {tournament.ID} was cancelled");
+            }
+            tournament.AssignMatches(tournament.TournamentType.CreateMatches(tournament));
             tournamentsDB.CreateMatches(tournament);
 
+        }
+
+        private void CancellTournament(Tournament tournament)
+        {
+
+            Tournament newTournament = new Tournament(tournament.ID, tournament.TournamentType, tournament.Title, tournament.TournamentInfo, tournament.StartDate, tournament.EndDate, tournament.MinPlayers, tournament.MaxPlayers, tournament.Location, tournament.Sport, TournamentStatus.Cancelled);
+            tournaments.Remove(tournament);
+            tournaments.Add(newTournament);
+            tournamentsDB.CancelTournament(tournament);
+        }
+
+        public List<Match> GetMatches(Tournament tournament)
+        {
+            return tournamentsDB.RetrieveMatches(tournament);
         }
 
         public void RetrieveMatches(Tournament tournament)

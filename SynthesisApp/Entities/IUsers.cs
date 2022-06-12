@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public interface IUsers<T>
+    public interface IUsers
     {
-        public void AddUser(T user);
-        public List<T> ReadUsers();
-        public void UpdateUser(T user);
-        public void DeleteUser(T user);
+        public void AddUser(User user);
+        public List<User> ReadUsers();
+        public void UpdateUser(User user);
+        public void DeleteUser(User user);
     }
 }

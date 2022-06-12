@@ -48,19 +48,22 @@
             this.tbTitle = new System.Windows.Forms.TextBox();
             this.btnGenerateMatches = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tpMatches = new System.Windows.Forms.TabPage();
             this.lblMatches = new System.Windows.Forms.ListBox();
             this.btnSaveResults = new System.Windows.Forms.Button();
             this.tbPlayer2Score = new System.Windows.Forms.TextBox();
             this.tbPlayer1Score = new System.Windows.Forms.TextBox();
             this.lblPlayer2 = new System.Windows.Forms.Label();
             this.lblPlayer1 = new System.Windows.Forms.Label();
-            this.lblInformation = new System.Windows.Forms.Label();
             this.lblMatch = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tpTournaments = new System.Windows.Forms.TabPage();
+            this.btnDeleteTournament = new System.Windows.Forms.Button();
+            this.lblTournamentsInfo = new System.Windows.Forms.ListBox();
+            this.cbSports = new System.Windows.Forms.ComboBox();
+            this.lblSport = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tpMatches.SuspendLayout();
+            this.tpTournaments.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnAddTournament
@@ -79,6 +82,7 @@
             this.lblTournaments.ItemHeight = 20;
             this.lblTournaments.Location = new System.Drawing.Point(6, 29);
             this.lblTournaments.Name = "lblTournaments";
+            this.lblTournaments.ScrollAlwaysVisible = true;
             this.lblTournaments.Size = new System.Drawing.Size(295, 204);
             this.lblTournaments.TabIndex = 5;
             this.lblTournaments.SelectedIndexChanged += new System.EventHandler(this.lblTournaments_SelectedIndexChanged);
@@ -131,7 +135,7 @@
             this.cbTypes.FormattingEnabled = true;
             this.cbTypes.Location = new System.Drawing.Point(100, 297);
             this.cbTypes.Name = "cbTypes";
-            this.cbTypes.Size = new System.Drawing.Size(250, 28);
+            this.cbTypes.Size = new System.Drawing.Size(125, 28);
             this.cbTypes.TabIndex = 12;
             // 
             // lblInfo
@@ -225,32 +229,31 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tpMatches);
+            this.tabControl1.Controls.Add(this.tpTournaments);
             this.tabControl1.Location = new System.Drawing.Point(2, -2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(797, 452);
             this.tabControl1.TabIndex = 23;
             // 
-            // tabPage1
+            // tpMatches
             // 
-            this.tabPage1.Controls.Add(this.lblMatches);
-            this.tabPage1.Controls.Add(this.btnSaveResults);
-            this.tabPage1.Controls.Add(this.tbPlayer2Score);
-            this.tabPage1.Controls.Add(this.tbPlayer1Score);
-            this.tabPage1.Controls.Add(this.lblPlayer2);
-            this.tabPage1.Controls.Add(this.lblPlayer1);
-            this.tabPage1.Controls.Add(this.lblInformation);
-            this.tabPage1.Controls.Add(this.lblMatch);
-            this.tabPage1.Controls.Add(this.lblTournaments);
-            this.tabPage1.Location = new System.Drawing.Point(4, 29);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(789, 419);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tpMatches.Controls.Add(this.lblMatches);
+            this.tpMatches.Controls.Add(this.btnSaveResults);
+            this.tpMatches.Controls.Add(this.tbPlayer2Score);
+            this.tpMatches.Controls.Add(this.tbPlayer1Score);
+            this.tpMatches.Controls.Add(this.lblPlayer2);
+            this.tpMatches.Controls.Add(this.lblPlayer1);
+            this.tpMatches.Controls.Add(this.lblMatch);
+            this.tpMatches.Controls.Add(this.lblTournaments);
+            this.tpMatches.Location = new System.Drawing.Point(4, 29);
+            this.tpMatches.Name = "tpMatches";
+            this.tpMatches.Padding = new System.Windows.Forms.Padding(3);
+            this.tpMatches.Size = new System.Drawing.Size(789, 419);
+            this.tpMatches.TabIndex = 0;
+            this.tpMatches.Text = "Matches";
+            this.tpMatches.UseVisualStyleBackColor = true;
             // 
             // lblMatches
             // 
@@ -260,6 +263,7 @@
             this.lblMatches.Name = "lblMatches";
             this.lblMatches.Size = new System.Drawing.Size(199, 164);
             this.lblMatches.TabIndex = 29;
+            this.lblMatches.SelectedIndexChanged += new System.EventHandler(this.lblMatches_SelectedIndexChanged);
             this.lblMatches.DoubleClick += new System.EventHandler(this.lblMatches_DoubleClick);
             // 
             // btnSaveResults
@@ -304,15 +308,6 @@
             this.lblPlayer1.TabIndex = 24;
             this.lblPlayer1.Text = "Player 1:";
             // 
-            // lblInformation
-            // 
-            this.lblInformation.AutoSize = true;
-            this.lblInformation.Location = new System.Drawing.Point(6, 261);
-            this.lblInformation.Name = "lblInformation";
-            this.lblInformation.Size = new System.Drawing.Size(295, 20);
-            this.lblInformation.TabIndex = 23;
-            this.lblInformation.Text = "Click once to select. Click twice to view info";
-            // 
             // lblMatch
             // 
             this.lblMatch.AutoSize = true;
@@ -322,33 +317,75 @@
             this.lblMatch.TabIndex = 3;
             this.lblMatch.Text = "Matches:";
             // 
-            // tabPage2
+            // tpTournaments
             // 
-            this.tabPage2.Controls.Add(this.dtStartDate);
-            this.tabPage2.Controls.Add(this.btnGenerateMatches);
-            this.tabPage2.Controls.Add(this.btnAddTournament);
-            this.tabPage2.Controls.Add(this.tbLocation);
-            this.tabPage2.Controls.Add(this.lblTitle);
-            this.tabPage2.Controls.Add(this.lblEndDate);
-            this.tabPage2.Controls.Add(this.lblLocation);
-            this.tabPage2.Controls.Add(this.tbMinPlayers);
-            this.tabPage2.Controls.Add(this.lblMaxPlayers);
-            this.tabPage2.Controls.Add(this.dtEndDate);
-            this.tabPage2.Controls.Add(this.lblInfo);
-            this.tabPage2.Controls.Add(this.tbMaxPlayers);
-            this.tabPage2.Controls.Add(this.tbTitle);
-            this.tabPage2.Controls.Add(this.lblStartDate);
-            this.tabPage2.Controls.Add(this.lblType);
-            this.tabPage2.Controls.Add(this.tbInfo);
-            this.tabPage2.Controls.Add(this.lblMinPlayers);
-            this.tabPage2.Controls.Add(this.cbTypes);
-            this.tabPage2.Location = new System.Drawing.Point(4, 29);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(789, 419);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tpTournaments.Controls.Add(this.btnDeleteTournament);
+            this.tpTournaments.Controls.Add(this.lblTournamentsInfo);
+            this.tpTournaments.Controls.Add(this.cbSports);
+            this.tpTournaments.Controls.Add(this.lblSport);
+            this.tpTournaments.Controls.Add(this.dtStartDate);
+            this.tpTournaments.Controls.Add(this.btnGenerateMatches);
+            this.tpTournaments.Controls.Add(this.btnAddTournament);
+            this.tpTournaments.Controls.Add(this.tbLocation);
+            this.tpTournaments.Controls.Add(this.lblTitle);
+            this.tpTournaments.Controls.Add(this.lblEndDate);
+            this.tpTournaments.Controls.Add(this.lblLocation);
+            this.tpTournaments.Controls.Add(this.tbMinPlayers);
+            this.tpTournaments.Controls.Add(this.lblMaxPlayers);
+            this.tpTournaments.Controls.Add(this.dtEndDate);
+            this.tpTournaments.Controls.Add(this.lblInfo);
+            this.tpTournaments.Controls.Add(this.tbMaxPlayers);
+            this.tpTournaments.Controls.Add(this.tbTitle);
+            this.tpTournaments.Controls.Add(this.lblStartDate);
+            this.tpTournaments.Controls.Add(this.lblType);
+            this.tpTournaments.Controls.Add(this.tbInfo);
+            this.tpTournaments.Controls.Add(this.lblMinPlayers);
+            this.tpTournaments.Controls.Add(this.cbTypes);
+            this.tpTournaments.Location = new System.Drawing.Point(4, 29);
+            this.tpTournaments.Name = "tpTournaments";
+            this.tpTournaments.Padding = new System.Windows.Forms.Padding(3);
+            this.tpTournaments.Size = new System.Drawing.Size(789, 419);
+            this.tpTournaments.TabIndex = 1;
+            this.tpTournaments.Text = "Tournaments";
+            this.tpTournaments.UseVisualStyleBackColor = true;
+            // 
+            // btnDeleteTournament
+            // 
+            this.btnDeleteTournament.Location = new System.Drawing.Point(275, 352);
+            this.btnDeleteTournament.Name = "btnDeleteTournament";
+            this.btnDeleteTournament.Size = new System.Drawing.Size(107, 52);
+            this.btnDeleteTournament.TabIndex = 26;
+            this.btnDeleteTournament.Text = "Delete tournament";
+            this.btnDeleteTournament.UseVisualStyleBackColor = true;
+            this.btnDeleteTournament.Click += new System.EventHandler(this.btnDeleteTournament_Click);
+            // 
+            // lblTournamentsInfo
+            // 
+            this.lblTournamentsInfo.FormattingEnabled = true;
+            this.lblTournamentsInfo.ItemHeight = 20;
+            this.lblTournamentsInfo.Location = new System.Drawing.Point(498, 7);
+            this.lblTournamentsInfo.Name = "lblTournamentsInfo";
+            this.lblTournamentsInfo.ScrollAlwaysVisible = true;
+            this.lblTournamentsInfo.Size = new System.Drawing.Size(295, 324);
+            this.lblTournamentsInfo.TabIndex = 25;
+            this.lblTournamentsInfo.SelectedIndexChanged += new System.EventHandler(this.lblTournamentsInfo_SelectedIndexChanged);
+            // 
+            // cbSports
+            // 
+            this.cbSports.FormattingEnabled = true;
+            this.cbSports.Location = new System.Drawing.Point(360, 302);
+            this.cbSports.Name = "cbSports";
+            this.cbSports.Size = new System.Drawing.Size(125, 28);
+            this.cbSports.TabIndex = 24;
+            // 
+            // lblSport
+            // 
+            this.lblSport.AutoSize = true;
+            this.lblSport.Location = new System.Drawing.Point(275, 305);
+            this.lblSport.Name = "lblSport";
+            this.lblSport.Size = new System.Drawing.Size(48, 20);
+            this.lblSport.TabIndex = 23;
+            this.lblSport.Text = "Sport:";
             // 
             // MainForm
             // 
@@ -360,10 +397,10 @@
             this.Text = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.tpMatches.ResumeLayout(false);
+            this.tpMatches.PerformLayout();
+            this.tpTournaments.ResumeLayout(false);
+            this.tpTournaments.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -389,15 +426,18 @@
         private TextBox tbTitle;
         private Button btnGenerateMatches;
         private TabControl tabControl1;
-        private TabPage tabPage1;
-        private TabPage tabPage2;
+        private TabPage tpMatches;
+        private TabPage tpTournaments;
         private Button btnSaveResults;
         private TextBox tbPlayer2Score;
         private TextBox tbPlayer1Score;
         private Label lblPlayer2;
         private Label lblPlayer1;
-        private Label lblInformation;
         private ListBox lblMatches;
         private Label lblMatch;
+        private ComboBox cbSports;
+        private Label lblSport;
+        private ListBox lblTournamentsInfo;
+        private Button btnDeleteTournament;
     }
 }

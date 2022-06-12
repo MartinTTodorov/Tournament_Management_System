@@ -18,21 +18,32 @@ namespace SynthesisWebApp.Pages
   
 
         public static List<Challenge> UserChallenges { get; private set; }
+        public static string Challenger { get; private set; }
 
         [BindProperty]
-        public ChallengeUserDTO ChallengeUser { get; set; }
+        public ChallengeDTO ChallengeData { get; set; }
 
         public void OnGet()
         {
             UserChallenges = challengeManager.GetUserChallenges(Convert.ToInt32(User.Claims.First(x=>x.Type.Equals("ID")).Value));
             
+            
         }
 
         public IActionResult OnPost()
         {
-            User opponent = usersManager.GetUserByUsername(ChallengeUser.UserName);
-            challengeManager.ChallengeUser(Convert.ToInt32(User.Claims.First(x => x.Type.Equals("ID")).Value), opponent.Account.ID);
-            return Page();
+            try
+            {
+                User opponent = usersManager.GetUserByUsername(ChallengeData.UserName);
+                challengeManager.ChallengeUser(Convert.ToInt32(User.Claims.First(x => x.Type.Equals("ID")).Value), opponent.Account.ID, Convert.ToDateTime(ChallengeData.Date));
+
+            }
+            catch (Exception ex)
+            {
+                ViewData["Error"] = ex.Message;
+
+            }
+                return Page();
         }
     }
 }

@@ -15,28 +15,20 @@ namespace LogicLayer
         {
             this.matchesDB = matchesDB;
         }
-        /// <summary>
-        /// Inserts matches into the database
-        /// </summary>
-        /// <param name="match"></param>
-        public void AddMatch(Match match)
-        {
-            matchesDB.AddMatch(match);
-        }
-
+        
         public void SetMatchResults(Tournament tournament, Match match, int player1Score, int player2Score)
         {
-            
-            match.SetResults(player1Score, player2Score);
-            matchesDB.SetMatchResults(match);
+            if (tournament.TournamentStatus==TournamentStatus.Scheduled)
+            {
+                match.SetResults(player1Score, player2Score);
+                matchesDB.SetMatchResults(match);
+            }
+            else
+            {
+                throw new Exception($"You cant set results for this tournament. Status: {tournament.TournamentStatus}");
+            }
 
-        }
 
-
-        public void CreateMatches(Tournament tournament)
-        {
-            tournament.TournamentType.CreateMatches(tournament.PlayersInTournament);
-            
         }
     }
 }

@@ -5,16 +5,35 @@
 
 <body>
         <form class = "form" method="post">
+            <p> @ViewData["Error"]</p>
             <div class="container">
-                <label asp-for="ChallengeUser.UserName"><b>Username</b></label>
-                <input class = "LoginInput" asp-for="ChallengeUser.UserName">
-                <span class="validation-message text-danger" asp-validation-for="ChallengeUser.UserName"></span>
+                <label asp-for="ChallengeData.UserName"><b>Username</b></label>
+                <input class = "ChallengeInfo" asp-for="ChallengeData.UserName">
+                <span class="validation-message text-danger" asp-validation-for="ChallengeData.UserName"></span>
 
     
                 <button class = "buttonChallenge" type="submit">Challenge</button>
           </div>
 
+
+          <label>Sport:</label>
+            <select asp-for="ChallengeData.Sport" name="list" onChange="combo(this, 'box)">
+            <option>Badminton</option>
+            <option>Volleyball</option>
+            <option>CounterStrike</option>
+
+            </select>
+            
+
+            <label> Challenge date:</label> <span asp-validation-for="@Model.ChallengeData.Date"></span>
+            <input asp-for="@Model.ChallengeData.Date" id="date">
+            </div>
+
         </form>
+
+
+                    <label> Note: The sport above are implemented, but for some reason i couldnt extract them from the combobox here, <br /> so the challenge will be badminton no matter what is picked</label>
+
 
         <div>
 
@@ -29,19 +48,12 @@
                 <div class="Challenge">
 
                     <div class="tournament-text">
-                        <p>Challenge from @ChallengesModel.UserChallenges[i].ChallengerID</p>
-                        
-                        <a href = "/ChallengeInfo?ID=@ChallengesModel.UserChallenges[i].ID">View</a>
+                        <a href = "/ChallengeInfo?ID=@ChallengesModel.UserChallenges[i].ID">Challenge from @ChallengesModel.UserChallenges[i].ChallengerID, @ChallengesModel.UserChallenges[i].Status</a>
                     </div>
 
                 </div>
             }
 
-            </div>
-
-            <div class = "pastChallenges">
-
-                <p>Your past challenges:</p>
             </div>
 
         </div>

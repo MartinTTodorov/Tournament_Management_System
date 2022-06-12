@@ -8,8 +8,10 @@ namespace Entities
 {
     public interface IChallengesDB
     {
-        public void ChallengeUser(int challengerID, int opponentID);
-        public void ChangeChallengeStatus(Challenge challenge, string status);
+        public void ChallengeUser(Challenge challenge);
+        public void AcceptChallenge(Challenge challenge);
+        public void DenyChallenge(Challenge challenge);
+        public void SetResults(Challenge challenge);
         public List<Challenge> ReadChallenges();
     }
 }

@@ -22,14 +22,15 @@ namespace Entities
         private List<Match>? matches;
 
         private TournamentType tournamentType;
+        private SportType sport;
         private DateTime startDate;
         private DateTime endDate;
-        //Add sport later. Currently we only work with badminton, but to make the application extendable
-        //add sport and each sport will have its own match rules
+        
 
         public int ID { get { return id; } }
         public string Title { get { return title; } }
-        public List<User> PlayersInTournament { get { return playersInTournament; } } //only get if it is not null
+        public SportType Sport { get { return sport; } }
+        public List<User> PlayersInTournament { get { return playersInTournament; } } 
         public List<Match> Matches { get { return matches; } }
         public TournamentType TournamentType { get { return tournamentType; } }
         public string TournamentInfo { get { return tournamentInfo; } }
@@ -41,11 +42,10 @@ namespace Entities
         public TournamentStatus TournamentStatus { get { return tournamentStatus; } }
 
         //Not all params are needed(lists)
-        public Tournament(int id, TournamentType tournamentType, string title, string tournamentInfo, DateTime startDate, DateTime endDate, int minPlayers, int maxPlayers, string location, TournamentStatus tournamentStatus)
+        public Tournament(int id, TournamentType tournamentType, string title, string tournamentInfo, DateTime startDate, DateTime endDate, int minPlayers, int maxPlayers, string location, SportType sport, TournamentStatus tournamentStatus)
         {
             ValidateDates(startDate, endDate);
             ValidatePlayers(minPlayers, maxPlayers);
-            //ValidateType(tournamentType);
             this.id = id;
             this.tournamentType = tournamentType;
             this.title = title;
@@ -55,11 +55,12 @@ namespace Entities
             this.minPlayers = minPlayers;
             this.maxPlayers = maxPlayers;
             this.location = location;
+            this.sport = sport;
             this.tournamentStatus = tournamentStatus;
-            this.playersInTournament = new List<User>(); //ASK FOR THIS
+            this.playersInTournament = new List<User>();
         }
 
-        public Tournament(string tournamentInfo, string title, DateTime startDate, DateTime endDate, int minPlayers, int maxPlayers, string location, TournamentType tournamentType)
+        public Tournament(string tournamentInfo, string title, DateTime startDate, DateTime endDate, int minPlayers, int maxPlayers, string location, TournamentType tournamentType, SportType sport)
         {
             ValidateDates(startDate, endDate);
             ValidatePlayers(minPlayers, maxPlayers);
@@ -71,9 +72,10 @@ namespace Entities
             this.maxPlayers = maxPlayers;
             this.location = location;
             this.tournamentType=tournamentType;
+            this.sport = sport;
         }
 
-        private void ValidateDates(DateTime startDate, DateTime endDate) //private
+        private void ValidateDates(DateTime startDate, DateTime endDate)
         {
 
             if (startDate.CompareTo(endDate)>0)
@@ -83,40 +85,24 @@ namespace Entities
         }
         private void ValidatePlayers(int minPlayers, int maxPlayers)
         {
+            if (minPlayers==null || maxPlayers == null)
+            {
+                throw new Exception("Please insert number of players");
+            }
+
+            if (minPlayers<=0 || maxPlayers<=0)
+            {
+                throw new Exception("Min or max players cant be negative");
+            }
+
             if (minPlayers>maxPlayers)
             {
                 throw new Exception("Min players cannot be more than max players");
             }
         }
-        //doesnt work
-        private void ValidateType(TournamentType type) //make a unit test for every possible validation
-        {
-            if (!TournamentType.TournamentTypes.Contains(type));
-            {
-                throw new Exception("Invalid tournament type");
-            }
-        }
-        public void ValidatePlayers(List<User> players)
-        {
-            if (players.Count==0)
-            {
-                players = new List<User>();
-            }
-            else
-            {
-                
-            }
-        }
+        
 
-        private void ValidateStatus()
-        {
-            if (true)
-            {
-
-            }
-        }
-
-        public void AssignMatches(List<Match> matches) //is this a bad approach. Also include validation
+        public void AssignMatches(List<Match> matches)
         {
             this.matches = matches;
         }
@@ -127,9 +113,14 @@ namespace Entities
         }
 
 
-        public void AddPlayer(User user)                                                                                             //think about when to retrieve this list. Maybe everytime or maybe not
+        public void AddPlayer(User user)                                                                                            
         {
-            if (playersInTournament.Count!=0 && playersInTournament.Any(p=>p==user))
+            if (playersInTournament.Count==maxPlayers)
+            {
+                throw new Exception("This tournament is already full");
+            }
+
+            if (playersInTournament.Count!=0 && playersInTournament.Any(p=>p.Account.ID==user.Account.ID))
             {
                 throw new Exception("User has already entered this tournament");
             }
@@ -140,7 +131,7 @@ namespace Entities
         }
         public override string ToString()
         {
-            if (playersInTournament==null)                                                                                          //is this a good validation
+            if (playersInTournament==null)                                                                                         
             {
                 return $"Tournament ID:{this.id} players: 0/{maxPlayers}";
             }

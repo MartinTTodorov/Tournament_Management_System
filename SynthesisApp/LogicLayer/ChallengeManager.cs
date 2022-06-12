@@ -27,21 +27,36 @@ namespace LogicLayer
 
         public List<Challenge> GetUserChallenges(int id)
         {
-            return challenges.FindAll(x => x.OpponentID == id);
+            return challenges.FindAll(x => x.OpponentID == id && (x.Status=="Awaiting" || x.Status=="Accepted" || x.Status=="Finished"));
         }
-        public void ReadChallenges()
+
+        
+        public void ChallengeUser(int challengerID, int opponentID, DateTime date)
         {
 
-        }
-        public void ChallengeUser(int challengerID, int opponentID)
-        {
-            challenges.Add(new Challenge(autoIncrement.GetID(), challengerID, opponentID, "Awaiting"));
-            challengesDB.ChallengeUser(challengerID, opponentID);
+
+            if (challengerID==opponentID)
+            {
+                throw new Exception("You can't challenge yourself");
+            }
+            Challenge challenge = new Challenge(autoIncrement.GetID(), challengerID, opponentID, date, new Match(0, 0, new Badminton()) , "Awaiting");
+            challenges.Add(challenge);
+            challengesDB.ChallengeUser(challenge);
         }
 
         public void SetResults(Challenge challenge, int player1Score, int player2Score)
         {
+            if ((DateTime.Today - challenge.Date).Days==0)
+            {
+                challenge.Match.SetResults(player1Score, player2Score);
+                challengesDB.SetResults(challenge);
+            }
+            else
+            {
+                throw new Exception($"You can't yet insert results");
 
+            }
+            
         }
 
         public Challenge GetChallengeByID(int id)
@@ -51,17 +66,15 @@ namespace LogicLayer
 
         public void AcceptChallenge(Challenge challenge)
         {
-            challengesDB.ChangeChallengeStatus(challenge, "Accepted");
+            challengesDB.AcceptChallenge(challenge);
         }
 
-        public void UpdateStatus(Challenge challenge, string newStatus)
-        {
-            
-        }
+        
 
         public void DenyChallenge(Challenge challenge)
         {
-            challengesDB.ChangeChallengeStatus(challenge, "Denied");
+            
+            challengesDB.DenyChallenge(challenge);
         }
     }
 }

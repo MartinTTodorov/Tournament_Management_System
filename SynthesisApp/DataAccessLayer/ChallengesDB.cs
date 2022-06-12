@@ -19,70 +19,18 @@ namespace DataAccessLayer
 
         public void AcceptChallenge(Challenge challenge)
         {
-            string sql = "UPDATE synchallenges SET ChallengeStatus = @ChallengeStatus WHERE OpponentID=@OpponentID";
-            try
-            {
-
-            }
-            catch (MySqlException ex)
-            {
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-
-            }
-        }
-
-        public void ChallengeUser(int challengerID, int opponentID)
-        {
-            string sql = "INSERT INTO synchallenges (ChallengerID, OpponentID, ChallengeStatus) VALUES (@ChallengerID, @OpponentID, @ChallengeStatus)";
-
+            string sql = "UPDATE synchallenges SET ChallengeStatus = @ChallengeStatus WHERE ChallengeID=@ChallengeID";
             try
             {
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 conn.Open();
-                cmd.Parameters.AddWithValue("@ChallengerID", challengerID);
-                cmd.Parameters.AddWithValue("@OpponentID", opponentID);
-                cmd.Parameters.AddWithValue("@ChallengeStatus", "Awaiting");
+
+                cmd.Parameters.AddWithValue("@ChallengeID", challenge.ID);
+                cmd.Parameters.AddWithValue("@ChallengeStatus", "Accepted");
+
                 if (cmd.ExecuteNonQuery() != 1)
                 {
-                    throw new Exception("Match results were not uploaded into the database");
-                }
-
-            }
-            catch (MySqlException ex)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            finally
-            {
-
-            }
-        }
-
-        public void ChangeChallengeStatus(Challenge challenge, string status)
-        {
-            string sql = "UPDATE synchallenges SET ChallengeStatus = @ChallengeStatus WHERE OpponentID=@OpponentID";
-            try
-            {
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                conn.Open();
-
-                cmd.Parameters.AddWithValue("@OpponentID", challenge.OpponentID);
-                cmd.Parameters.AddWithValue("@ChallengeStatus", status);
-
-                if (cmd.ExecuteNonQuery()!=1)
-                {
-                    throw new Exception("The challenge status was not updated");
+                    throw new Exception("The challenge was not accepted");
                 }
 
             }
@@ -100,9 +48,72 @@ namespace DataAccessLayer
             }
         }
 
+        public void ChallengeUser(Challenge challenge)
+        {
+            string sql = "INSERT INTO synchallenges (ChallengerID, OpponentID, ChallengerScore, OpponentScore, Date, Sport, ChallengeStatus) VALUES (@ChallengerID, @OpponentID, @ChallengerScore, @OpponentScore, @Date, @Sport, @ChallengeStatus)";
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                conn.Open();
+                cmd.Parameters.AddWithValue("@ChallengerID", challenge.ChallengerID);
+                cmd.Parameters.AddWithValue("@OpponentID", challenge.OpponentID);
+                cmd.Parameters.AddWithValue("@Date", challenge.Date);
+                cmd.Parameters.AddWithValue("@Sport", challenge.Match.Sport);
+                cmd.Parameters.AddWithValue("@ChallengerScore", challenge.Match.Player1Score);
+                cmd.Parameters.AddWithValue("@OpponentScore", challenge.Match.Player2Score);
+                cmd.Parameters.AddWithValue("@ChallengeStatus", "Awaiting");
+                if (cmd.ExecuteNonQuery() != 1)
+                {
+                    throw new Exception("Match results were not uploaded into the database");
+                }
+
+            }
+            catch (MySqlException ex)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        
+
         public void DenyChallenge(Challenge challenge)
         {
-            throw new NotImplementedException();
+            string sql = "UPDATE synchallenges SET ChallengeStatus = @ChallengeStatus WHERE ChallengeID=@ChallengeID";
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                conn.Open();
+
+                cmd.Parameters.AddWithValue("@ChallengeID", challenge.ID);
+                cmd.Parameters.AddWithValue("@ChallengeStatus", "Denied");
+
+                if (cmd.ExecuteNonQuery() != 1)
+                {
+                    throw new Exception("The challenge was not denied");
+                }
+
+            }
+            catch (MySqlException ex)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         public int GetID()
@@ -132,14 +143,14 @@ namespace DataAccessLayer
 
             try
             {
-                string sql = "SELECT ChallengeID, ChallengerID, OpponentID, ChallengeStatus FROM synchallenges";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                string sql = "SELECT ChallengeID, ChallengerID, OpponentID, ChallengerScore, OpponentScore, Date, Sport, ChallengeStatus FROM synchallenges";
+                MySqlCommand cmd = new MySqlCommand(sql.ToString(), conn);
                 conn.Open();
                 MySqlDataReader dr = cmd.ExecuteReader();
 
                 while (dr.Read())
                 {
-                    challenges.Add(new Challenge(Convert.ToInt32(dr["ChallengeID"]), Convert.ToInt32(dr["ChallengerID"]), Convert.ToInt32(dr["OpponentID"]), dr["ChallengeStatus"].ToString()));
+                    challenges.Add(new Challenge(Convert.ToInt32(dr["ChallengeID"]), Convert.ToInt32(dr["ChallengerID"]), Convert.ToInt32(dr["OpponentID"]), Convert.ToDateTime(dr["Date"]), new Match(Convert.ToInt32(dr["ChallengerScore"]), Convert.ToInt32(dr["OpponentScore"]), SportType.SportTypes.Find(x => x.ToString() == dr["Sport"].ToString())), dr["ChallengeStatus"].ToString()));
                 }
             }
             catch (MySqlException ex)
@@ -155,6 +166,40 @@ namespace DataAccessLayer
                 conn.Close();
             }
             return challenges;
+        }
+
+        //Set results of a challenge and set status to finished
+        public void SetResults(Challenge challenge)
+        {
+            string sql = "UPDATE synchallenges SET ChallengerScore = @ChallengerScore, OpponentScore = @OpponentScore, ChallengeStatus = @ChallengeStatus WHERE ChallengeID=@ChallengeID";
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                conn.Open();
+
+                cmd.Parameters.AddWithValue("@ChallengeID", challenge.ID);
+                cmd.Parameters.AddWithValue("@ChallengerScore", challenge.Match.Player1Score);
+                cmd.Parameters.AddWithValue("@OpponentScore", challenge.Match.Player2Score);
+                cmd.Parameters.AddWithValue("@ChallengeStatus", "Finished");
+
+                if (cmd.ExecuteNonQuery() != 1)
+                {
+                    throw new Exception("The challenge results were not set");
+                }
+
+            }
+            catch (MySqlException ex)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
     }
 }

@@ -9,13 +9,15 @@ namespace Entities
     public class RoundRobin : TournamentType
     {
 
-        public override List<Match> CreateMatches(List<User> players)
+        public override List<Match> CreateMatches(Tournament tournament)
         {
-            //If the number of players is odd, add a dummy/bye player
+            List<User> players = tournament.PlayersInTournament;
+            //If the number of players are odd, add a dummy/bye player. Bye player has ID of 0.
             //Later if the bye player has to play against someone, we dont add that match
+
             if (players.Count % 2 == 1)
             {
-                players.Add(new User(new Account(9999, "Bye", "Bye"), "Bye", "Bye", "Bye", "Bye", "Bye"));
+                players.Add(new User(new Account(0, "Bye", "Bye"), "Bye", "Bye", "Bye@gmail.com", "Bye", "Bye"));
             }
             List<Match> matches = new List<Match>();
             int half = players.Count / 2;
@@ -29,7 +31,12 @@ namespace Entities
 
                 for (int j = 0; j < firstHalf.Count; j++)
                 {
-                    matches.Add(new Match(firstHalf[j], secondHalf[j], 0, 0));
+                    //If a dummy/bye player is caught, this match does not get added, as every player will have to play against a dummy
+                    //and automatically win anyways
+                    if (firstHalf[j].Account.ID!=0 && secondHalf[j].Account.ID!=0)
+                    {
+                        matches.Add(new Match(firstHalf[j], secondHalf[j], 0, 0, tournament.Sport));
+                    }
                 }
 
                 RotateList(players);

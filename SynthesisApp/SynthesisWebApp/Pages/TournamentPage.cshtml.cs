@@ -24,6 +24,7 @@ namespace SynthesisWebApp.Pages
         }
 
         public Tournament Tournament { get { return tournament; } private set { tournament = value; } }
+        public List<Match> Matches { get; private set; }
 
         [BindProperty]
         public int ID { get; set; }
@@ -31,8 +32,17 @@ namespace SynthesisWebApp.Pages
         public void OnGet(int id)
         {
             
-            Tournament = tournamentManager.GetTournamentByID(id);                                                                                                           //use a read only list so that nobody from outside can access it by a list.Find
+            Tournament = tournamentManager.GetTournamentByID(id);
+            try
+            {
+                tournamentManager.RetrieveMatches(Tournament);
 
+            }
+            catch (Exception ex)
+            {
+                ViewData["Error"] = ex.Message;
+            }
+            //Matches = tournamentManager.GetMatches(Tournament);
         }
 
         public IActionResult OnPost()

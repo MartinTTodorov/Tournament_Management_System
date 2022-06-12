@@ -10,12 +10,12 @@ namespace LogicLayer
     public class UsersManager
     {
         private List<User> users;
-        private IUsers<User> usersDB;
+        private IUsers usersDB;
         private IAutoIncrement autoIncrement;
 
         public List<User> Users { get { return users; } private set { users = value; } }
 
-        public UsersManager(IUsers<User> usersDB, IAutoIncrement autoIncrement)
+        public UsersManager(IUsers usersDB, IAutoIncrement autoIncrement)
         {
             this.usersDB = usersDB;
             users = usersDB.ReadUsers();
@@ -29,36 +29,44 @@ namespace LogicLayer
                 users.Clear();
             }
 
-            users = usersDB.ReadUsers(); //Should i use the list or the property Users
+            users = usersDB.ReadUsers();
         }
 
         public void AddUser(User user)
         {
+            if (users.Any(x=>x.Account.ID==user.Account.ID))
+            {
+                throw new Exception("User already exists");
+            }
             usersDB.AddUser(user);
             users.Add(user);
         }
 
         public void UpdateUser(User user)
         {
+            if (!users.Any(x => x.Account.ID == user.Account.ID))
+            {
+                throw new Exception("User doesnt exist");
+            }
+            users[users.FindIndex(x => x.Account.ID == user.Account.ID)] = user; //replaces the user's infomation based on the ID
             usersDB.UpdateUser(user); 
             
         }
 
         public void DeleteUser(User user)
         {
-            usersDB.DeleteUser(user);
+            if (!users.Any(x => x.Account.ID == user.Account.ID))
+            {
+                throw new Exception("User doesnt exist");
+            }
+
             users.Remove(user);
+            usersDB.DeleteUser(user);
         }
 
-        public User RetrieveUserByID(int id)
-        {
-            return users?.Find(x=>x.Account.ID==id); //Question mark
-        }
+        
 
-        public User RetrieveUserByAccount()
-        {
-            return null;
-        }
+        
 
         /// <summary>
         /// Retrieves the user by its login credentials. If they are invalid, user is null.
@@ -130,7 +138,7 @@ namespace LogicLayer
         {
             if (!users.Any(x=>x.Account.Username==username))
             {
-                throw new Exception("No such username exists");
+                throw new Exception("Please enter a valid username");
             }
             else
             {

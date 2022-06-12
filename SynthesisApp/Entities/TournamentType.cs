@@ -16,7 +16,7 @@ namespace Entities
         /// </summary>
         /// <param name="players"></param>
         /// <returns></returns>
-        public abstract List<Match> CreateMatches(List<User> players);
+        public abstract List<Match> CreateMatches(Tournament tournament);
         public abstract override string ToString();
 
         private static List<TournamentType> GetTournamentTypes()

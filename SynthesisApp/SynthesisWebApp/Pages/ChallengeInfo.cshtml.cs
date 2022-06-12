@@ -14,19 +14,68 @@ namespace SynthesisWebApp.Pages
     {
 
         private ChallengeManager challengeManager = new ChallengeManager(new ChallengesDB(), new ChallengesDB());
-        private Challenge challenge;
 
+
+        public static UsersManager UsersManager { get; private set; }
 
         [BindProperty]
         int ID { get; set; }
 
-        public Challenge Challenge { get { return challenge; } private set { challenge = value; } }
+        [BindProperty]
+        public ChallengeResultsDTO ChallengeResults { get; set; }
+
+        public static Challenge Challenge { get; set; }
         
         public void OnGet(int id)
         {
             Challenge = challengeManager.GetChallengeByID(id);
         }
 
+        public IActionResult OnPostAcceptChallenge()
+        {
+            try
+            {
+                challengeManager.AcceptChallenge(Challenge);
+                return new RedirectToPageResult("Challenges");
+
+            }
+            catch (Exception ex)
+            {
+                ViewData["Error"] = ex.Message;
+                return Page();
+            }
+        }
+
+        public IActionResult OnPostDenyChallenge()
+        {
+            try
+            {
+                challengeManager.DenyChallenge(Challenge);
+                return new RedirectToPageResult("Challenges");
+                
+            }
+            catch(Exception ex)
+            {
+                ViewData["Error"] = ex.Message;
+                return Page();
+            }
+        }
+
+        public IActionResult OnPostSetResults()
+        {
+            try
+            {
+                challengeManager.SetResults(Challenge, ChallengeResults.ChallengerScore, ChallengeResults.OpponentScore);
+                return new RedirectToPageResult("Challenges");
+                
+
+            }
+            catch(Exception ex)
+            {
+                ViewData["Error"] = ex.Message;
+                return Page();
+            }
+        }
 
     }
 }

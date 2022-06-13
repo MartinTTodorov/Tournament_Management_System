@@ -74,7 +74,7 @@ namespace LogicLayer
             }
             else
             {
-                throw new Exception($"You can't delete a tournament that is not open or has players that have entered. Current tournament is {tournament.TournamentStatus} and has {tournament.PlayersInTournament.Count} players. You can try to cancel the tournament");
+                throw new Exception($"You can't delete a tournament that is not open or has players that have entered. Current tournament is {tournament.TournamentStatus} and has {tournament.PlayersInTournament.Count} players");
             }
         }
 
